@@ -15,7 +15,7 @@ class QuestionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Question
-        fields = ['question_text','categories','level','answers']
+        fields = ['question_text','categories','level','answers', 'image_url']
 
 class CategorySerializer(serializers.ModelSerializer):
 
