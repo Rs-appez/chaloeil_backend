@@ -27,9 +27,9 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG',default=False)
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'chaloeil-backend.fly.dev']
+ALLOWED_HOSTS = [ config('BACKEND_HOST',default='127.0.0.1') ]
 
-CSRF_TRUSTED_ORIGINS = ['https://chaloeil-backend.fly.dev']
+CSRF_TRUSTED_ORIGINS = ['https://'+ config('BACKEND_HOST',default='')]
 
 # Application definition
 
