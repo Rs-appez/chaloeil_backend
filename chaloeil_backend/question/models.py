@@ -1,7 +1,7 @@
 from django.db import models
 
 class Question(models.Model):
-    question_text = models.TextField(unique=True)
+    question_text = models.TextField()
     categories = models.ManyToManyField('Category')
     level = models.ForeignKey('Level', on_delete=models.PROTECT)
     image_url = models.CharField(max_length=200, blank=True, null=True)
