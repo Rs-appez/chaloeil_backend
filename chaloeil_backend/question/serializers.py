@@ -18,7 +18,7 @@ class QuestionSerializer(serializers.ModelSerializer):
 
     categories = serializers.StringRelatedField(many=True)
     answers = AnswerSerializer(many=True)
-    # level = serializers.StringRelatedField(many=False)
+    level = serializers.StringRelatedField(many=False)
 
     class Meta:
         model = Question
