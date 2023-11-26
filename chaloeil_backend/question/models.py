@@ -1,7 +1,7 @@
 from django.db import models
 
 class Question(models.Model):
-    question_text = models.TextField()
+    question_text = models.TextField(unique=True)
     categories = models.ManyToManyField('Category')
     level = models.ForeignKey('Level', on_delete=models.PROTECT)
     image_url = models.CharField(max_length=200, blank=True, null=True)
@@ -18,13 +18,13 @@ class Answer(models.Model):
         return self.answer_text
 
 class Category(models.Model):
-    category_text = models.CharField(max_length=200)
+    category_text = models.CharField(max_length=200,unique=True)
 
     def __str__(self) -> str:
         return self.category_text
 
 class Level(models.Model):
-    level_text = models.CharField(max_length=200)
+    level_text = models.CharField(max_length=200,unique=True)
 
     def __str__(self) -> str:
         return self.level_text
