@@ -23,3 +23,8 @@ class Category(models.Model):
     def __str__(self) -> str:
         return self.category_text
 
+class Level(models.Model):
+    level_text = models.CharField(max_length=200)
+
+    def __str__(self) -> str:
+        return self.level_text

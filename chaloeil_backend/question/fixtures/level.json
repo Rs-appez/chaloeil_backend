@@ -1,0 +1,30 @@
+[
+    {
+        "model" : "question.level",
+        "pk" : 1,
+        "fields" : {
+            "level_text" : "Easy"
+        }
+    },
+    {
+        "model" : "question.level",
+        "pk" : 2,
+        "fields" : {
+            "level_text" : "Medium"
+        }
+    },
+    {
+        "model" : "question.level",
+        "pk" : 3,
+        "fields" : {
+            "level_text" : "Hard"
+        }
+    },
+    {
+        "model" : "question.level",
+        "pk" : 4,
+        "fields" : {
+            "level_text" : "HARDCORE"
+        }
+    }
+]
