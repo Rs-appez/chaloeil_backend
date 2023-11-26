@@ -30,4 +30,4 @@ RUN python manage.py collectstatic --noinput
 
 EXPOSE 8000
 
-CMD ["gunicorn", "--bind", ":8000", "--workers", "2", "chaloeil_backend.wsgi"]
+CMD ["sh", "./runserver.sh"]
