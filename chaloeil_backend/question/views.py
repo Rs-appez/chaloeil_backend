@@ -18,6 +18,14 @@ class QuestionViewSet(viewsets.ModelViewSet):
         serializer = QuestionSerializer(question, context={'request': request})
         return Response(serializer.data)
 
+    @action(detail=False, methods=['get'],url_path= 'questions_with',permission_classes=[IsAuthenticated])
+    def get_questions_with(self, request, pk=None):
+        text = request.query_params.get('text')
+        questions = Question.objects.filter(question_text__iexact=text)
+        answers = Answer.objects.filter(question__in=questions, is_correct=True)
+        serializer = AnswerSerializer(answers, context={'request': request}, many=True)
+        return Response(serializer.data)
+
 class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
     
     queryset = Category.objects.all()
