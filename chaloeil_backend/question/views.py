@@ -14,7 +14,8 @@ class QuestionViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['get'],url_path= 'random_question',permission_classes=[IsAuthenticated])
     def get_random_question(self, request, pk=None):
-        question = Question.objects.order_by('?').first()
+        category = request.query_params.get('category')
+        question = Question.objects.order_by('?').first() if not category  else Question.objects.filter(categories__category_text__iexact=category).order_by('?').first()
         serializer = QuestionSerializer(question, context={'request': request})
         return Response(serializer.data)
 
