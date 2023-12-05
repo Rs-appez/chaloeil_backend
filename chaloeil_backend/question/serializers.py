@@ -9,10 +9,10 @@ class LevelSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class AnswerSerializer(serializers.ModelSerializer):
-
+    id_question = serializers.PrimaryKeyRelatedField(queryset=Question.objects.all(), source='question')
     class Meta:
         model = Answer
-        fields = ['answer_text','is_correct']
+        fields = ['answer_text','is_correct','id_question']
         
 class QuestionSerializer(serializers.ModelSerializer):
 
