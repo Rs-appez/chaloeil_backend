@@ -28,6 +28,14 @@ class QuestionViewSet(viewsets.ModelViewSet):
         answers = Answer.objects.filter(question__in=questions, is_correct=True)
         serializer = AnswerSerializer(answers, context={'request': request}, many=True)
         return Response(serializer.data)
+    
+    @action(detail=False, methods=['get'],url_path= 'questions_without_answer',permission_classes=[IsAuthenticated])
+    def get_questions_without_answer(self, request, pk=None):
+        questions = Question.objects.all()
+        questions_without_answers = [question for question in questions if all(answer.is_correct is False for answer in question.answers.all())]
+        serializer = QuestionSerializer(questions_without_answers, context={'request': request}, many=True)
+        return Response(serializer.data)
+
 
 class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
     
