@@ -15,7 +15,7 @@ class QuestionViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['get'],url_path= 'random_question',permission_classes=[IsAuthenticated])
     def get_random_question(self, request, pk=None):
         category = request.query_params.get('category')
-        nb = int(request.query_params.get('number')) or 1
+        nb = int(request.query_params.get('number')) if request.query_params.get('number') is not None else 1
 
         question = Question.objects.order_by('?').all()[:nb] if not category  else Question.objects.filter(categories__category_text__iexact=category).order_by('?').all()[:nb]
         serializer = QuestionSerializer(question, context={'request': request}, many=True)
