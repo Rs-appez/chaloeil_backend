@@ -38,7 +38,11 @@ class QuestionViewSet(viewsets.ModelViewSet):
         serializer = QuestionSerializer(questions_without_answers, context={'request': request}, many=True)
         return Response(serializer.data)
 
-
+    @action(detail=False, methods=['get'],url_path= 'questions_with_image',permission_classes=[IsAuthenticated])   
+    def get_questions_with_image(self, request, pk=None):
+        questions = Question.objects.filter(image_url__isnull=False)
+        serializer = QuestionSerializer(questions, context={'request': request}, many=True)
+        return Response(serializer.data)
 class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
     
     queryset = Category.objects.all()
