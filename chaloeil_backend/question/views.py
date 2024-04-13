@@ -40,7 +40,8 @@ class QuestionViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['get'],url_path= 'questions_with_image',permission_classes=[IsAuthenticated])   
     def get_questions_with_image(self, request, pk=None):
-        questions = Question.objects.filter(image_url__isnull=False)
+        url = request.query_params.get('url') if request.query_params.get('url') is not None else ''
+        questions = Question.objects.filter(image_url__isnull=False, image_url__icontains=url)
         serializer = QuestionSerializer(questions, context={'request': request}, many=True)
         return Response(serializer.data)
 class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
