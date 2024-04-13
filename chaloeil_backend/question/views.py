@@ -24,6 +24,8 @@ class QuestionViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['get'],url_path= 'questions_with',permission_classes=[IsAuthenticated])
     def get_questions_with(self, request, pk=None):
         text = request.query_params.get('text')
+        if not text:
+            return Response({'error': 'text parameter is required'}, status=400)
         questions = Question.objects.filter(question_text__icontains=text)
         answers = Answer.objects.filter(question__in=questions, is_correct=True)
         serializer = AnswerSerializer(answers, context={'request': request}, many=True)
