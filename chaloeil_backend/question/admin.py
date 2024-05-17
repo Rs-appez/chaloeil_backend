@@ -10,6 +10,7 @@ class QuestionAdmin(admin.ModelAdmin):
   inlines = [AnswerInline]  
   list_display = ('question_text', 'display_categories', 'level')
   list_filter = ['categories','level']
+  search_fields = ['question_text']
 
   def display_categories(self, obj):
     return ", ".join([category.category_text for category in obj.categories.all()])
