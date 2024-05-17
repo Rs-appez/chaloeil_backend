@@ -7,7 +7,13 @@ class AnswerInline(admin.TabularInline):
   extra = 4
 
 class QuestionAdmin(admin.ModelAdmin):
-  inlines = [AnswerInline]
+  inlines = [AnswerInline]  
+  list_display = ('question_text', 'display_categories', 'level')
+  list_filter = ['categories','level']
+
+  def display_categories(self, obj):
+    return ", ".join([category.category_text for category in obj.categories.all()])
+  display_categories.short_description = 'Categories'
 
 admin.site.register(Question,QuestionAdmin)
 admin.site.register(Answer)
