@@ -39,11 +39,12 @@ class QuestionViewSet(viewsets.ModelViewSet):
         serializer = QuestionSerializer(questions_without_answers, context={'request': request}, many=True)
         return Response(serializer.data)
 
-    @action(detail=False, methods=['get'],url_path= 'questions_with_image',permission_classes=[IsAuthenticated],pagination_class = PageNumberPagination)   
+    @action(detail=False, methods=['get'],url_path= 'questions_with_image',permission_classes=[IsAuthenticated])   
     def get_questions_with_image(self, request, pk=None):
         url = request.query_params.get('url') if request.query_params.get('url') is not None else ''
         questions = Question.objects.filter(image_url__isnull=False, image_url__icontains=url)
-        serializer = QuestionSerializer(questions, context={'request': request}, many=True)
+        page = self.paginate_queryset(questions)
+        serializer = QuestionSerializer(page, context={'request': request}, many=True)
 
         return Response(serializer.data)
 class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
