@@ -2,6 +2,8 @@ from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated , IsAdminUser
+from django.core.paginator import Paginator
+
 
 from .serializers import QuestionSerializer , CategorySerializer , AnswerSerializer
 
@@ -39,10 +41,13 @@ class QuestionViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
     @action(detail=False, methods=['get'],url_path= 'questions_with_image',permission_classes=[IsAuthenticated])   
-    def get_questions_with_image(self, request, pk=None):
+    def get_questions_with_image(self, request, pk=None, page_number=1, items_per_page=10):
         url = request.query_params.get('url') if request.query_params.get('url') is not None else ''
         questions = Question.objects.filter(image_url__isnull=False, image_url__icontains=url)
         serializer = QuestionSerializer(questions, context={'request': request}, many=True)
+        paginator = Paginator(questions, items_per_page)
+        page_obj = paginator.get_page(page_number)
+        return page_obj
         return Response(serializer.data)
 class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
     
