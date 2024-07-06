@@ -8,6 +8,7 @@ class AnswerInline(admin.TabularInline):
 
 class QuestionAdmin(admin.ModelAdmin):
   inlines = [AnswerInline]  
+  save_as = True
   list_display = ('question_text', 'display_categories', 'level')
   list_filter = ['categories','level']
   search_fields = ['question_text']
