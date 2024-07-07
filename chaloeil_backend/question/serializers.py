@@ -12,7 +12,7 @@ class AnswerSerializer(serializers.ModelSerializer):
     id_question = serializers.PrimaryKeyRelatedField(queryset=Question.objects.all(), source='question')
     class Meta:
         model = Answer
-        fields = ['answer_text','is_correct','id_question']
+        fields = ['answer_text','is_correct','id_question','emoticon']
         
 class QuestionSerializer(serializers.ModelSerializer):
 

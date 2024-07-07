@@ -13,6 +13,7 @@ class Answer(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name='answers')
     answer_text = models.CharField(max_length=200)
     is_correct = models.BooleanField(default=False)
+    emoticon = models.CharField(max_length=100, blank=True, null=True)
 
     def __str__(self) -> str:
         return self.answer_text
