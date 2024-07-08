@@ -28,7 +28,7 @@ class QuestionViewSet(viewsets.ModelViewSet):
         if not text:
             return Response({'error': 'text parameter is required'}, status=400)
         questions = Question.objects.filter(question_text__icontains=text)
-        answers = Answer.objects.filter(question__in=questions, is_correct=True)
+        answers = Answer.objects.filter(question__in=questions)
         serializer = AnswerSerializer(answers, context={'request': request}, many=True)
         return Response(serializer.data)
     
@@ -52,8 +52,8 @@ class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
-# class AnswerViewSet(viewsets.ModelViewSet):
-    
-#     queryset = Answer.objects.all()
-#     serializer_class = AnswerSerializer
+class AnswerViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAdminUser]
+    queryset = Answer.objects.all()
+    serializer_class = AnswerSerializer
 
