@@ -5,6 +5,7 @@ class Question(models.Model):
     categories = models.ManyToManyField('Category')
     level = models.ForeignKey('Level', on_delete=models.PROTECT)
     image_url = models.CharField(max_length=200, blank=True, null=True)
+    suffle_answers = models.BooleanField(default=True)
 
     def __str__(self) -> str:
         return self.question_text
