@@ -22,7 +22,7 @@ class QuestionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Question
-        fields = ['id','question_text','categories','level','answers', 'image_url','suffle_answers']
+        fields = ['id','question_text','categories','level','answers', 'image_url','shuffle_answers']
 
 class CategorySerializer(serializers.ModelSerializer):
 
