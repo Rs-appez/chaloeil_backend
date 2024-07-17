@@ -33,20 +33,13 @@ class QuestionViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['get'],url_path= 'questions_with',permission_classes=[IsAuthenticated])
     def get_questions_with(self, request, pk=None):
         text = request.query_params.get('text')
-        is_correct = request.query_params.get('is_correct')
 
         if not text:
             return Response({'error': 'text parameter is required'}, status=400)
         
         questions = Question.objects.filter(question_text__icontains=text)
 
-        if not is_correct:
-            answers = Answer.objects.filter(question__in=questions)
-        else:
-            is_correct = bool(is_correct)
-            answers = Answer.objects.filter(question__in=questions, is_correct=is_correct)
-
-        serializer = AnswerSerializer(answers, context={'request': request}, many=True)
+        serializer = QuestionSerializer(questions, context={'request': request}, many=True)
         return Response(serializer.data)
     
     @action(detail=False, methods=['get'],url_path= 'questions_without_answer',permission_classes=[IsAuthenticated])
