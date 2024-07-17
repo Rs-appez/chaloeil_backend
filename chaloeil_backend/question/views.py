@@ -17,8 +17,17 @@ class QuestionViewSet(viewsets.ModelViewSet):
     def get_random_question(self, request, pk=None):
         category = request.query_params.get('category')
         nb = int(request.query_params.get('number')) if request.query_params.get('number') is not None else 1
+        id_range = request.query_params.get('id_range')
 
-        question = Question.objects.order_by('?').all()[:nb] if not category  else Question.objects.filter(categories__category_text__iexact=category).order_by('?').all()[:nb]
+        if id_range:
+            try:
+                id_range = id_range.split('-')
+                question = Question.objects.filter(id__range=(id_range[0], id_range[1]))
+            except Exception:
+                return Response({'error': 'id_range parameter is invalid'}, status=400)
+        else:
+            question = Question.objects.order_by('?').all()[:nb] if not category  else Question.objects.filter(categories__category_text__iexact=category).order_by('?').all()[:nb]
+
         serializer = QuestionSerializer(question, context={'request': request}, many=True)
         return Response(serializer.data)
 
