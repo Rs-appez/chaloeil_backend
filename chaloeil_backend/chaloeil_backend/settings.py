@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'question.apps.QuestionConfig',
     'chaloeil_backend',
     'user',
+    'mofus',
 ]
 
 MIDDLEWARE = [
