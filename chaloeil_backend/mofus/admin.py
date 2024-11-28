@@ -1,3 +1,8 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import Word
+
+class WordAdmin(admin.ModelAdmin):
+    list_editable = ['word']
+
+admin.site.register(Word)
