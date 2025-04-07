@@ -10,6 +10,6 @@ psycopg2==2.9.10
 python-decouple==3.8
 pytz==2025.2
 sqlparse==0.5.3
-typing_extensions==4.12.2
+typing_extensions==4.13.1
 whitenoise==6.9.0
 zipp>=3.19.1 # not directly required, pinned by Snyk to avoid a vulnerability
