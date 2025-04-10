@@ -1,6 +1,4 @@
-ARG PYTHON_VERSION=3.10-slim-bullseye
-
-FROM python:${PYTHON_VERSION}
+FROM python:3.13.3-slim
 
 ENV TZ="Europe/Brussels"
 
