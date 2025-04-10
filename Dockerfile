@@ -1,4 +1,4 @@
-FROM python:3.14-rc-alpine3.20
+FROM python:3.13.3-slim
 
 ENV TZ="Europe/Brussels"
 
