@@ -5,7 +5,7 @@ django-filter==25.1
 djangorestframework==3.16.0
 gunicorn==23.0.0
 Markdown==3.8
-packaging==24.2
+packaging==25.0
 psycopg2==2.9.10
 python-decouple==3.8
 pytz==2025.2
