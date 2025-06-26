@@ -45,7 +45,7 @@ class StatisticsViewSet(viewsets.ModelViewSet):
                 question = Question.objects.get(id=question_id)
                 if not question:
                     return Response({"error": "Question not found"}, status=404)
-                answer = Answer.objects.get(id=answer_id)
+                answer = Answer.objects.filter(id=answer_id).first()
 
                 statistics, created = Statistic.objects.get_or_create(
                     player=participant, question=question
