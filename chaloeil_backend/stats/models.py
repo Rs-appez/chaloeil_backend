@@ -78,13 +78,16 @@ class Team(Participant):
         self.names.add(team_name)
         return team_name
 
+
 class AnswerSelected(models.Model):
     answer = models.ForeignKey(Answer, on_delete=models.CASCADE)
     number_of_times = models.PositiveIntegerField(default=0)
 
 
 class Statistic(models.Model):
-    player = models.ForeignKey(Participant, on_delete=models.SET_NULL, null=True, blank=True)
+    player = models.ForeignKey(
+        Participant, on_delete=models.SET_NULL, null=True, blank=True
+    )
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
 
     asked_count = models.PositiveIntegerField(default=0)
