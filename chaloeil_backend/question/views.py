@@ -3,9 +3,9 @@ from rest_framework.decorators import action
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 
-from .serializers import QuestionSerializer, CategorySerializer, AnswerSerializer
+from .serializers import QuestionSerializer, CategorySerializer, AnswerSerializer, QuestionsOfTheDaySerializer
 
-from .models import Question, Answer, Category
+from .models import Question, Answer, Category, QuestionsOfTheDay
 
 
 class QuestionViewSet(viewsets.ModelViewSet):
@@ -117,3 +117,9 @@ class AnswerViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAdminUser]
     queryset = Answer.objects.all()
     serializer_class = AnswerSerializer
+
+
+class QuestionsOfTheDayViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAdminUser]
+    queryset = QuestionsOfTheDay.objects.all()
+    serializer_class = QuestionsOfTheDaySerializer

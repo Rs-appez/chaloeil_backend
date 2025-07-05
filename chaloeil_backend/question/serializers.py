@@ -1,4 +1,4 @@
-from .models import Question, Category, Answer, Level
+from .models import Question, Category, Answer, Level, QuestionsOfTheDay
 from rest_framework import serializers
 
 
@@ -40,3 +40,11 @@ class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = "__all__"
+
+
+class QuestionsOfTheDaySerializer(serializers.ModelSerializer):
+    questions = QuestionSerializer(many=True)
+
+    class Meta:
+        model = QuestionsOfTheDay
+        fields = ["id", "questions", "number_of_questions", "date"]
