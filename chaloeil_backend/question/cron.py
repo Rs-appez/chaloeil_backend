@@ -1,7 +1,7 @@
-def test_task():
+from .models import QuestionsOfTheDay
+
+def create_questions_of_the_day():
     """
-    This is a test task that can be scheduled using cron.
-    It currently does nothing but can be expanded in the future.
+    Create or update the Questions of the Day.
     """
-    with open('/tmp/django_cron_test.log', 'a') as f:
-        f.write('Test task executed successfully.\n')
+    # QuestionsOfTheDay(number_of_questions=2).save()
