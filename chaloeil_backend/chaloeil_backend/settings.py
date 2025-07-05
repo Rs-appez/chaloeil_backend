@@ -14,6 +14,8 @@ from pathlib import Path
 from decouple import config
 import dj_database_url
 
+from .cronjobs import CRONJOBS  # Import cron jobs
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -41,6 +43,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "whitenoise.runserver_nostatic",
     "django.contrib.staticfiles",
+    "django_crontab",
     "rest_framework",
     "rest_framework.authtoken",
     "question.apps.QuestionConfig",
