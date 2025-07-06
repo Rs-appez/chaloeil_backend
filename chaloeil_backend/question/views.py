@@ -136,11 +136,11 @@ class QuestionsOfTheDayViewSet(viewsets.ModelViewSet):
         """
         Get the Questions of the Day for today.
         """
-        today = datetime.now().date()
         qotd = QuestionsOfTheDay.objects.last()
         if not qotd:
             return Response({"error": "No Questions of the Day found"}, status=404)
 
+        today = datetime.now(qotd.date.tzinfo)
         if qotd.date > today + timedelta(hours=6):
             return Response({"error": "Questions of the Day are not available yet"}, status=404)
 
