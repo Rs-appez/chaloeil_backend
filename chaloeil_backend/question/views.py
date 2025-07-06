@@ -7,6 +7,8 @@ from .serializers import QuestionSerializer, CategorySerializer, AnswerSerialize
 
 from .models import Question, Answer, Category, QuestionsOfTheDay
 
+from datetime import datetime
+
 
 class QuestionViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAdminUser]
@@ -123,3 +125,24 @@ class QuestionsOfTheDayViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAdminUser]
     queryset = QuestionsOfTheDay.objects.all()
     serializer_class = QuestionsOfTheDaySerializer
+
+    @action(
+        detail=False,
+        methods=["get"],
+        url_path="qotd",
+        permission_classes=[IsAuthenticated],
+    )
+    def get_qotd(self, request, pk=None):
+        """
+        Get the Questions of the Day for today.
+        """
+        today = datetime.now().date()
+        qotd = QuestionsOfTheDay.objects.last()
+        if not qotd:
+            return Response({"error": "No Questions of the Day found"}, status=404)
+
+        if qotd.date > today + datetime.timedelta(hours=6):
+            return Response({"error": "Questions of the Day are not available yet"}, status=404)
+
+        serializer = self.get_serializer(qotd)
+        return Response(serializer.data)
