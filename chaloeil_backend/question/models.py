@@ -43,7 +43,7 @@ class QuestionsOfTheDay(models.Model):
     questions = models.ManyToManyField(
         Question, related_name="questions_of_the_day")
     number_of_questions = models.PositiveIntegerField(default=20)
-    date = models.DateField(auto_now_add=True)
+    date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self) -> str:
         return f"{self.date} - {self.questions}"
