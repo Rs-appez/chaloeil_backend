@@ -1,4 +1,5 @@
 CRONJOBS = [
-    ('* * * * *', 'question.cron.create_questions_of_the_day', '>> /tmp/django_cron_test.log 2>&1'),
+    ('0 3 * * *', 'question.cron.create_questions_of_the_day',
+     '>> /tmp/django_cron_test.log 2>&1'),
 
 ]
