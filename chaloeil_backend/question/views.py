@@ -7,7 +7,7 @@ from .serializers import QuestionSerializer, CategorySerializer, AnswerSerialize
 
 from .models import Question, Answer, Category, QuestionsOfTheDay
 
-from datetime import datetime
+from datetime import datetime, timedelta
 
 
 class QuestionViewSet(viewsets.ModelViewSet):
@@ -141,7 +141,7 @@ class QuestionsOfTheDayViewSet(viewsets.ModelViewSet):
         if not qotd:
             return Response({"error": "No Questions of the Day found"}, status=404)
 
-        if qotd.date > today + datetime.timedelta(hours=6):
+        if qotd.date > today + timedelta(hours=6):
             return Response({"error": "Questions of the Day are not available yet"}, status=404)
 
         serializer = self.get_serializer(qotd)
