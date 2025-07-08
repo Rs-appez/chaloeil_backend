@@ -1,6 +1,6 @@
 from django.db import models
 
-from question.models import Question, Answer
+from question.models import Question, Answer, QuestionsOfTheDay
 
 
 class Participant(models.Model):
@@ -113,4 +113,16 @@ class Statistic(models.Model):
             )
             answer_selected.number_of_times += 1
             answer_selected.save()
+        self.save()
+
+
+class QotdStatistic(models.Model):
+    player = models.ForeignKey(Player, on_delete=models.CASCADE)
+    score = models.PositiveIntegerField(default=0)
+
+    def __str__(self) -> str:
+        return f"{self.player} - Score: {self.score}"
+
+    def increment_score(self, points: int):
+        self.score += points
         self.save()

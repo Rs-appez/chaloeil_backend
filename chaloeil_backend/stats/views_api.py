@@ -3,7 +3,7 @@ from rest_framework.decorators import action
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 
-from .models import Player, Team, Statistic, TeamName
+from .models import Player, Team, Statistic, QotdStatistic
 from question.models import Question, Answer
 from .serializers import PlayerSerializer, TeamSerializer, StatisticsSerializer
 
@@ -121,3 +121,34 @@ class TeamViewSet(viewsets.ModelViewSet):
             return Response("Teams added successfully", status=201)
         except json.JSONDecodeError:
             return Response({"error": "Invalid JSON format"}, status=400)
+
+
+class QotdStatisticViewSet(viewsets.ModelViewSet):
+    """
+    ViewSet for handling Questions of the Day statistics.
+    """
+
+    queryset = QotdStatistic.objects.all()
+    serializer_class = StatisticsSerializer
+    permission_classes = [IsAdminUser]
+
+    @action(detail=False, methods=["post"], permission_classes=[IsAdminUser])
+    def add_score(self, request):
+        try:
+            player_id = str(request.data.get("player_id"))
+            score = int(request.data.get("score"))
+
+            player, _ = Player.objects.get_or_create(
+                discord_id=player_id)
+
+            qotd_statistic, _ = QotdStatistic.objects.get_or_create(
+                player=player,
+            )
+
+            qotd_statistic.increment_score(score)
+
+            return Response("QotdStatistic updated successfully", status=200)
+        except TypeError as e:
+            return Response({"error": f"Invalid data type: {str(e)}"}, status=400)
+        except Exception as e:
+            return Response({"error": str(e)}, status=500)
