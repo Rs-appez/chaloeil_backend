@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Player, Team, Statistic, AnswerSelected, TeamName, Participant
+from .models import Player, Team, Statistic, AnswerSelected, TeamName, Participant, QotdStatistic
 from question.serializers import QuestionSerializer, AnswerSerializer
 
 
@@ -62,3 +62,11 @@ class StatisticsSerializer(serializers.ModelSerializer):
             "incorrect_count",
             "answers",
         ]
+
+
+class QotdStatisticSerializer(serializers.ModelSerializer):
+    player = PlayerSerializer()
+
+    class Meta:
+        model = QotdStatistic
+        fields = ["id", "player", "score"]

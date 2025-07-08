@@ -1,6 +1,6 @@
 from django.db import models
 
-from question.models import Question, Answer
+from question.models import Question, Answer, QuestionsOfTheDay
 
 
 class Participant(models.Model):
@@ -31,11 +31,11 @@ class Participant(models.Model):
 
 
 class Player(Participant):
-    discord_id = models.CharField(max_length=100, unique=True)
+    discord_id = models.CharField(max_length=32, unique=True)
     name = models.CharField(max_length=100)
 
     def __str__(self) -> str:
-        return self.name
+        return f"{self.name} - ({self.discord_id})"
 
 
 class TeamName(models.Model):
@@ -113,4 +113,16 @@ class Statistic(models.Model):
             )
             answer_selected.number_of_times += 1
             answer_selected.save()
+        self.save()
+
+
+class QotdStatistic(models.Model):
+    player = models.ForeignKey(Player, on_delete=models.CASCADE)
+    score = models.PositiveIntegerField(default=0)
+
+    def __str__(self) -> str:
+        return f"{self.player} - Score: {self.score}"
+
+    def increment_score(self, points: int):
+        self.score += points
         self.save()
