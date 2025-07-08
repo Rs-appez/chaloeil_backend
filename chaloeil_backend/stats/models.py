@@ -31,11 +31,11 @@ class Participant(models.Model):
 
 
 class Player(Participant):
-    discord_id = models.CharField(max_length=100, unique=True)
+    discord_id = models.CharField(max_length=32, unique=True)
     name = models.CharField(max_length=100)
 
     def __str__(self) -> str:
-        return self.name
+        return f"{self.name} - ({self.discord_id})"
 
 
 class TeamName(models.Model):
