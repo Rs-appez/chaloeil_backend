@@ -8,6 +8,7 @@ from .serializers import QuestionSerializer, CategorySerializer, AnswerSerialize
 from .models import Question, Answer, Category, QuestionsOfTheDay
 
 from datetime import datetime, timedelta
+import random
 
 
 class QuestionViewSet(viewsets.ModelViewSet):
@@ -146,3 +147,18 @@ class QuestionsOfTheDayViewSet(viewsets.ModelViewSet):
 
         serializer = self.get_serializer(qotd)
         return Response(serializer.data)
+
+    @action(detail=False, methods=["post"], url_path="generate_qotd", permission_classes=[IsAdminUser])
+    def generate_qotd(self, request, pk=None):
+        """
+        Generate Questions of the Day.
+        """
+        try :
+            number_of_questions = random.randint(15, 25)
+
+            qotd = QuestionsOfTheDay.objects.create(number_of_questions=number_of_questions)
+            qotd.save()  # This will trigger the save method to populate questions
+
+            return Response({"message": "Questions of the Day generated successfully"}, status=201)
+        except Exception as e:
+            return Response({"error": str(e)}, status=500)
