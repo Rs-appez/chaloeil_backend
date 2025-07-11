@@ -168,10 +168,8 @@ class QuestionsOfTheDayViewSet(viewsets.ModelViewSet):
         try:
             number_of_questions = random.randint(15, 25)
 
-            qotd = QuestionsOfTheDay.objects.create(
-                number_of_questions=number_of_questions
-            )
-            qotd.save()  # This will trigger the save method to populate questions
+            QuestionsOfTheDay.objects.create(
+                number_of_questions=number_of_questions)
 
             return Response(
                 {"message": "Questions of the Day generated successfully"}, status=201
