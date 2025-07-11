@@ -50,13 +50,16 @@ class QuestionsOfTheDay(models.Model):
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)  # Save first to get an ID
-        questions = self.__get_random_questions_not_in_qotd(
-            self.number_of_questions)
-        self.questions.set(questions)
+        if self.questions is None or self.questions.count() == 0:
+            questions = self.__get_random_questions_not_in_qotd(
+                self.number_of_questions)
+            self.questions.set(questions)
 
     def __get_random_questions_not_in_qotd(self, count: int) -> List[Question]:
-        used_questions = list(QuestionsOfTheDay.objects.values_list(
-            "questions", flat=True))
-        questions = Question.objects.exclude(
-            id__in=used_questions).order_by("?")[:count]
+        used_questions = list(
+            QuestionsOfTheDay.objects.values_list("questions", flat=True)
+        )
+        questions = Question.objects.exclude(id__in=used_questions).order_by("?")[
+            :count
+        ]
         return questions
