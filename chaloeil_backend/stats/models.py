@@ -116,6 +116,12 @@ class Statistic(models.Model):
         self.save()
 
 
+class PlayerQotd(models.Model):
+    player = models.ForeignKey(Player, on_delete=models.CASCADE)
+    question_of_the_day = models.ForeignKey(
+        QuestionsOfTheDay, on_delete=models.CASCADE)
+
+
 class QotdStatistic(models.Model):
     player = models.ForeignKey(Player, on_delete=models.CASCADE)
     score = models.PositiveIntegerField(default=0)

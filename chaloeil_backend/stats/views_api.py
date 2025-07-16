@@ -3,7 +3,7 @@ from rest_framework.decorators import action
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 
-from .models import Player, Team, Statistic, QotdStatistic
+from .models import Player, Team, Statistic, QotdStatistic, PlayerQotd
 from question.models import Question, Answer
 from .serializers import PlayerSerializer, TeamSerializer, StatisticsSerializer
 
@@ -143,6 +143,10 @@ class QotdStatisticViewSet(viewsets.ModelViewSet):
 
             qotd_statistic, _ = QotdStatistic.objects.get_or_create(
                 player=player,
+            )
+            PlayerQotd.objects.create(
+                player=player,
+                qotd_statistic=qotd_statistic,
             )
 
             qotd_statistic.increment_score(score)
