@@ -11,6 +11,7 @@ from .serializers import (
 )
 
 from .models import Question, Answer, Category, QuestionsOfTheDay
+from statistics.models import PlayerQotd
 
 from datetime import datetime, timedelta
 import random
@@ -142,9 +143,21 @@ class QuestionsOfTheDayViewSet(viewsets.ModelViewSet):
         """
         Get the Questions of the Day for today.
         """
+        player = request.get("player")
+        if not player:
+            return Response({"error": "Player not found"}, status=404)
+
         qotd = QuestionsOfTheDay.objects.last()
         if not qotd:
             return Response({"error": "No Questions of the Day found"}, status=404)
+
+        is_player_answered = PlayerQotd.objects.filter(
+            player=player, questions_of_the_day=qotd).exists()
+        if is_player_answered:
+            return Response(
+                {"error": "You have already answered today's Questions of the Day"},
+                status=403,
+            )
 
         today = datetime.now(qotd.date.tzinfo)
         if qotd.date > today + timedelta(hours=6):
