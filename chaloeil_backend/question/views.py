@@ -11,7 +11,7 @@ from .serializers import (
 )
 
 from .models import Question, Answer, Category, QuestionsOfTheDay
-from statistics.models import PlayerQotd
+from stats.models import PlayerQotd
 
 from datetime import datetime, timedelta
 import random
@@ -40,8 +40,7 @@ class QuestionViewSet(viewsets.ModelViewSet):
         if id_range:
             try:
                 id_range = id_range.split("-")
-                question = Question.objects.filter(
-                    id__range=(id_range[0], id_range[1]))
+                question = Question.objects.filter(id__range=(id_range[0], id_range[1]))
             except Exception:
                 return Response({"error": "id_range parameter is invalid"}, status=400)
         else:
@@ -111,8 +110,7 @@ class QuestionViewSet(viewsets.ModelViewSet):
             image_url__isnull=False, image_url__icontains=url
         )
         page = self.paginate_queryset(questions)
-        serializer = QuestionSerializer(
-            page, context={"request": request}, many=True)
+        serializer = QuestionSerializer(page, context={"request": request}, many=True)
 
         return Response(serializer.data)
 
@@ -152,7 +150,8 @@ class QuestionsOfTheDayViewSet(viewsets.ModelViewSet):
             return Response({"error": "No Questions of the Day found"}, status=404)
 
         is_player_answered = PlayerQotd.objects.filter(
-            player=player, questions_of_the_day=qotd).exists()
+            player=player, questions_of_the_day=qotd
+        ).exists()
         if is_player_answered:
             return Response(
                 {"error": "You have already answered today's Questions of the Day"},
@@ -181,8 +180,7 @@ class QuestionsOfTheDayViewSet(viewsets.ModelViewSet):
         try:
             number_of_questions = random.randint(15, 25)
 
-            QuestionsOfTheDay.objects.create(
-                number_of_questions=number_of_questions)
+            QuestionsOfTheDay.objects.create(number_of_questions=number_of_questions)
 
             return Response(
                 {"message": "Questions of the Day generated successfully"}, status=201
