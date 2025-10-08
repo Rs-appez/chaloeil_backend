@@ -1,6 +1,6 @@
 asgiref==3.10.0
 dj-database-url==3.0.1
-Django==5.1.12
+Django==5.1.13
 django-crontab==0.7.1
 django-filter==25.1
 djangorestframework==3.16.1
