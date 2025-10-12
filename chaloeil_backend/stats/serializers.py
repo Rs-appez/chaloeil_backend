@@ -1,6 +1,14 @@
 from rest_framework import serializers
 
-from .models import Player, Team, Statistic, AnswerSelected, TeamName, Participant, QotdStatistic
+from .models import (
+    Player,
+    Team,
+    Statistic,
+    AnswerSelected,
+    TeamName,
+    Participant,
+    QotdStatistic,
+)
 from question.serializers import QuestionSerializer, AnswerSerializer
 
 
