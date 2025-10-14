@@ -149,8 +149,9 @@ class QuestionsOfTheDayViewSet(viewsets.ModelViewSet):
             return Response({"error": "No Questions of the Day found"}, status=404)
 
         is_player_answered = PlayerQotd.objects.filter(
-            player=player, question_of_the_day=qotd
+            player__discord_id=player, question_of_the_day=qotd
         ).exists()
+
         if is_player_answered:
             return Response(
                 {"error": "You have already answered today's Questions of the Day"},
