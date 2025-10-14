@@ -40,26 +40,41 @@ class Level(models.Model):
 
 
 class QuestionsOfTheDay(models.Model):
-    questions = models.ManyToManyField(
-        Question, related_name="questions_of_the_day")
     number_of_questions = models.PositiveIntegerField(default=20)
     date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self) -> str:
-        return f"{self.date} - {self.questions}"
+        return f"{self.date}"
 
     def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)  # Save first to get an ID
-        if self.questions is None or self.questions.count() == 0:
+        is_new = self.pk is None
+        super().save(*args, **kwargs)
+        if is_new:
             questions = self.__get_random_questions_not_in_qotd(
-                self.number_of_questions)
-            self.questions.set(questions)
+                self.number_of_questions
+            )
+            for idx, question in enumerate(questions):
+                QuestionsOfTheDayQuestion.objects.create(
+                    questions_of_the_day=self, question=question, order=idx
+                )
 
     def __get_random_questions_not_in_qotd(self, count: int) -> List[Question]:
-        used_questions = list(
-            QuestionsOfTheDay.objects.values_list("questions", flat=True)
-        )
-        questions = Question.objects.exclude(id__in=used_questions).order_by("?")[
-            :count
-        ]
+        used_questions = QuestionsOfTheDayQuestion.objects.all().values("question")
+        questions = Question.objects.exclude(id__in=used_questions).order_by(
+            "?"
+        )[:count]
         return questions
+
+
+class QuestionsOfTheDayQuestion(models.Model):
+    questions_of_the_day = models.ForeignKey(
+        QuestionsOfTheDay, on_delete=models.CASCADE, related_name="questions"
+    )
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    order = models.PositiveIntegerField()
+
+    class Meta:
+        ordering = ["order"]
+
+    def __str__(self) -> str:
+        return f"{self.questions_of_the_day} - {self.question.question_text}"
