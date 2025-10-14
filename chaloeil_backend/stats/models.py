@@ -120,6 +120,9 @@ class PlayerQotd(models.Model):
     player = models.ForeignKey(Player, on_delete=models.CASCADE)
     question_of_the_day = models.ForeignKey(QuestionsOfTheDay, on_delete=models.CASCADE)
 
+    class Meta:
+        unique_together = ("player", "question_of_the_day")
+
     def __str__(self) -> str:
         return f"{self.player} - QOTD: {self.question_of_the_day}"
 
