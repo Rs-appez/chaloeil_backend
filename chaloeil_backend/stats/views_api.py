@@ -153,7 +153,7 @@ class QotdStatisticViewSet(viewsets.ModelViewSet):
             )
             PlayerQotd.objects.create(
                 player=player,
-                qotd_statistic=qotd_statistic,
+                question_of_the_day=QuestionsOfTheDay.objects.last(),
             )
 
             qotd_statistic.increment_score(score)
