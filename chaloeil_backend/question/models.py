@@ -57,6 +57,8 @@ class QuestionsOfTheDay(models.Model):
                 QuestionsOfTheDayQuestion.objects.create(
                     questions_of_the_day=self, question=question, order=idx
                 )
+            self.number_of_questions = questions.count()
+            super().save(update_fields=["number_of_questions"])
 
     def __get_random_questions_not_in_qotd(self, count: int) -> List[Question]:
         used_questions = QuestionsOfTheDayQuestion.objects.all().values("question")
