@@ -1,5 +1,6 @@
 import json
 
+from django.db.utils import IntegrityError
 from question.models import Answer, Question
 from rest_framework import viewsets
 from rest_framework.decorators import action
@@ -145,15 +146,10 @@ class QotdStatisticViewSet(viewsets.ModelViewSet):
             player_id = str(request.data.get("player_id"))
             score = int(request.data.get("score"))
 
-            player, _ = Player.objects.get_or_create(
-                discord_id=player_id)
+            player, _ = Player.objects.get_or_create(discord_id=player_id)
 
             qotd_statistic, _ = QotdStatistic.objects.get_or_create(
                 player=player,
-            )
-            PlayerQotd.objects.create(
-                player=player,
-                question_of_the_day=QuestionsOfTheDay.objects.last(),
             )
 
             qotd_statistic.increment_score(score)
@@ -161,5 +157,30 @@ class QotdStatisticViewSet(viewsets.ModelViewSet):
             return Response("QotdStatistic updated successfully", status=200)
         except TypeError as e:
             return Response({"error": f"Invalid data type: {str(e)}"}, status=400)
+        except Exception as e:
+            return Response({"error": str(e)}, status=500)
+
+    @action(detail=False, methods=["post"], permission_classes=[IsAdminUser])
+    def log_player(self, request, pk=None):
+        try:
+            player_id = str(request.data.get("player_id"))
+            question_of_the_day_id = int(request.data.get("qotd_id"))
+
+            player, _ = Player.objects.get_or_create(discord_id=player_id)
+
+            question_of_the_day = QuestionsOfTheDay.objects.get(
+                id=question_of_the_day_id
+            )
+            player_qotf = PlayerQotd.objects.create(
+                player=player, question_of_the_day=question_of_the_day
+            )
+
+            return Response("Player succefuly log", status=201)
+        except TypeError as e:
+            return Response({"error": f"Invalid data type: {str(e)}"}, status=400)
+        except IntegrityError:
+            return Response(
+                {"error": "Player has already logged this QOTD"}, status=403
+            )
         except Exception as e:
             return Response({"error": str(e)}, status=500)
