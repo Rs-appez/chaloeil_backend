@@ -138,7 +138,7 @@ class QuestionsOfTheDayViewSet(viewsets.ModelViewSet):
     )
     def get_qotd(self, request, pk=None):
         """
-        Get the Questions of the Day for today.
+        Get the Questions of the Day
         """
         player = request.query_params.get("player")
         if not player:
