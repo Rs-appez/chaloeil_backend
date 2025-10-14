@@ -1,20 +1,19 @@
-from rest_framework.response import Response
-from rest_framework.decorators import action
+import random
+from datetime import datetime, timedelta
+
 from rest_framework import viewsets
-from rest_framework.permissions import IsAuthenticated, IsAdminUser
-
-from .serializers import (
-    QuestionSerializer,
-    CategorySerializer,
-    AnswerSerializer,
-    QuestionsOfTheDaySerializer,
-)
-
-from .models import Question, Answer, Category, QuestionsOfTheDay
+from rest_framework.decorators import action
+from rest_framework.permissions import IsAdminUser, IsAuthenticated
+from rest_framework.response import Response
 from stats.models import PlayerQotd
 
-from datetime import datetime, timedelta
-import random
+from .models import Answer, Category, Question, QuestionsOfTheDay
+from .serializers import (
+    AnswerSerializer,
+    CategorySerializer,
+    QuestionSerializer,
+    QuestionsOfTheDaySerializer,
+)
 
 
 class QuestionViewSet(viewsets.ModelViewSet):
