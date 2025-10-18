@@ -171,7 +171,7 @@ class QotdStatisticViewSet(viewsets.ModelViewSet):
             question_of_the_day = QuestionsOfTheDay.objects.get(
                 id=question_of_the_day_id
             )
-            player_qotf = PlayerQotd.objects.create(
+            PlayerQotd.objects.create(
                 player=player, question_of_the_day=question_of_the_day
             )
 
