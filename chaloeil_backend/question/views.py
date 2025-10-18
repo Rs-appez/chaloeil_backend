@@ -1,19 +1,20 @@
-from rest_framework.response import Response
-from rest_framework.decorators import action
-from rest_framework import viewsets
-from rest_framework.permissions import IsAuthenticated, IsAdminUser
-
-from .serializers import (
-    QuestionSerializer,
-    CategorySerializer,
-    AnswerSerializer,
-    QuestionsOfTheDaySerializer,
-)
-
-from .models import Question, Answer, Category, QuestionsOfTheDay
-
+import random
 from datetime import datetime, timedelta
 import random
+
+from rest_framework import viewsets
+from rest_framework.decorators import action
+from rest_framework.permissions import IsAdminUser, IsAuthenticated
+from rest_framework.response import Response
+from stats.models import PlayerQotd
+
+from .models import Answer, Category, Question, QuestionsOfTheDay
+from .serializers import (
+    AnswerSerializer,
+    CategorySerializer,
+    QuestionSerializer,
+    QuestionsOfTheDaySerializer,
+)
 
 
 class QuestionViewSet(viewsets.ModelViewSet):
@@ -39,8 +40,7 @@ class QuestionViewSet(viewsets.ModelViewSet):
         if id_range:
             try:
                 id_range = id_range.split("-")
-                question = Question.objects.filter(
-                    id__range=(id_range[0], id_range[1]))
+                question = Question.objects.filter(id__range=(id_range[0], id_range[1]))
             except Exception:
                 return Response({"error": "id_range parameter is invalid"}, status=400)
         else:
@@ -110,8 +110,7 @@ class QuestionViewSet(viewsets.ModelViewSet):
             image_url__isnull=False, image_url__icontains=url
         )
         page = self.paginate_queryset(questions)
-        serializer = QuestionSerializer(
-            page, context={"request": request}, many=True)
+        serializer = QuestionSerializer(page, context={"request": request}, many=True)
 
         return Response(serializer.data)
 
@@ -140,14 +139,28 @@ class QuestionsOfTheDayViewSet(viewsets.ModelViewSet):
     )
     def get_qotd(self, request, pk=None):
         """
-        Get the Questions of the Day for today.
+        Get the Questions of the Day
         """
+        player = request.query_params.get("player")
+        if not player:
+            return Response({"error": "Player not found"}, status=404)
+
         qotd = QuestionsOfTheDay.objects.last()
         if not qotd:
             return Response({"error": "No Questions of the Day found"}, status=404)
 
+        is_player_answered = PlayerQotd.objects.filter(
+            player__discord_id=player, question_of_the_day=qotd
+        ).exists()
+
+        if is_player_answered:
+            return Response(
+                {"error": "You have already answered today's Questions of the Day"},
+                status=403,
+            )
+
         today = datetime.now(qotd.date.tzinfo)
-        if qotd.date > today + timedelta(hours=6):
+        if today > qotd.date + timedelta(hours=qotd.answer_time_limit_hours):
             return Response(
                 {"error": "Questions of the Day are not available yet"}, status=404
             )
@@ -168,8 +181,7 @@ class QuestionsOfTheDayViewSet(viewsets.ModelViewSet):
         try:
             number_of_questions = random.randint(15, 25)
 
-            QuestionsOfTheDay.objects.create(
-                number_of_questions=number_of_questions)
+            QuestionsOfTheDay.objects.create(number_of_questions=number_of_questions)
 
             return Response(
                 {"message": "Questions of the Day generated successfully"}, status=201
