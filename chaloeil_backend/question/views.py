@@ -179,7 +179,7 @@ class QuestionsOfTheDayViewSet(viewsets.ModelViewSet):
         Generate Questions of the Day.
         """
         try:
-            number_of_questions = random.randint(15, 25)
+            number_of_questions = random.randint(8, 12)
 
             QuestionsOfTheDay.objects.create(number_of_questions=number_of_questions)
 
