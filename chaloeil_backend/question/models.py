@@ -41,6 +41,7 @@ class Level(models.Model):
 
 class QuestionsOfTheDay(models.Model):
     number_of_questions = models.PositiveIntegerField(default=20)
+    time_to_answer_hour = models.PositiveIntegerField(default=8)
     date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self) -> str:
