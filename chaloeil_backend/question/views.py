@@ -160,7 +160,7 @@ class QuestionsOfTheDayViewSet(viewsets.ModelViewSet):
             )
 
         today = datetime.now(qotd.date.tzinfo)
-        if today > qotd.date + timedelta(hours=qotd.answer_time_limit_hours):
+        if today > qotd.date + timedelta(hours=qotd.time_to_answer_hour):
             return Response(
                 {"error": "Questions of the Day are not available yet"}, status=404
             )
