@@ -3,7 +3,11 @@ from datetime import datetime, timedelta
 
 from rest_framework import viewsets
 from rest_framework.decorators import action
-from rest_framework.permissions import IsAdminUser, IsAuthenticated
+from rest_framework.permissions import (
+    IsAdminUser,
+    IsAuthenticated,
+    DjangoModelPermissions,
+)
 from rest_framework.response import Response
 from stats.models import PlayerQotd
 
@@ -134,7 +138,7 @@ class QuestionsOfTheDayViewSet(viewsets.ModelViewSet):
         detail=False,
         methods=["get"],
         url_path="qotd",
-        permission_classes=[IsAuthenticated],
+        permission_classes=[DjangoModelPermissions],
     )
     def get_qotd(self, request, pk=None):
         """
@@ -171,7 +175,7 @@ class QuestionsOfTheDayViewSet(viewsets.ModelViewSet):
         detail=False,
         methods=["post"],
         url_path="generate_qotd",
-        permission_classes=[IsAdminUser],
+        permission_classes=[DjangoModelPermissions],
     )
     def generate_qotd(self, request, pk=None):
         """

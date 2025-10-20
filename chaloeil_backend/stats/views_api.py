@@ -4,7 +4,7 @@ from django.db.utils import IntegrityError
 from question.models import Answer, Question
 from rest_framework import viewsets
 from rest_framework.decorators import action
-from rest_framework.permissions import IsAdminUser
+from rest_framework.permissions import DjangoModelPermissions
 from rest_framework.response import Response
 
 from .models import (
@@ -25,9 +25,9 @@ class StatisticsViewSet(viewsets.ModelViewSet):
 
     queryset = Statistic.objects.all()
     serializer_class = StatisticsSerializer
-    permission_classes = [IsAdminUser]
+    permission_classes = [DjangoModelPermissions]
 
-    @action(detail=False, methods=["post"], permission_classes=[IsAdminUser])
+    @action(detail=False, methods=["post"], permission_classes=[DjangoModelPermissions])
     def add_answer(self, request):
         try:
             question_id = request.data.get("question_id")
@@ -74,9 +74,9 @@ class PlayerViewSet(viewsets.ModelViewSet):
 
     queryset = Player.objects.all()
     serializer_class = PlayerSerializer
-    permission_classes = [IsAdminUser]
+    permission_classes = [DjangoModelPermissions]
 
-    @action(detail=False, methods=["post"], permission_classes=[IsAdminUser])
+    @action(detail=False, methods=["post"], permission_classes=[DjangoModelPermissions])
     def add_players(self, request):
         """
         Adds players to the database from a JSON payload.
@@ -103,9 +103,9 @@ class TeamViewSet(viewsets.ModelViewSet):
 
     queryset = Team.objects.all()
     serializer_class = TeamSerializer
-    permission_classes = [IsAdminUser]
+    permission_classes = [DjangoModelPermissions]
 
-    @action(detail=False, methods=["post"], permission_classes=[IsAdminUser])
+    @action(detail=False, methods=["post"], permission_classes=[DjangoModelPermissions])
     def add_teams(self, request):
         """
         Adds teams to the database from a JSON payload.
@@ -138,9 +138,9 @@ class QotdStatisticViewSet(viewsets.ModelViewSet):
 
     queryset = QotdStatistic.objects.all()
     serializer_class = StatisticsSerializer
-    permission_classes = [IsAdminUser]
+    permission_classes = [DjangoModelPermissions]
 
-    @action(detail=False, methods=["post"], permission_classes=[IsAdminUser])
+    @action(detail=False, methods=["post"], permission_classes=[DjangoModelPermissions])
     def add_score(self, request):
         try:
             player_id = str(request.data.get("player_id"))
@@ -160,7 +160,7 @@ class QotdStatisticViewSet(viewsets.ModelViewSet):
         except Exception as e:
             return Response({"error": str(e)}, status=500)
 
-    @action(detail=False, methods=["post"], permission_classes=[IsAdminUser])
+    @action(detail=False, methods=["post"], permission_classes=[DjangoModelPermissions])
     def log_player(self, request, pk=None):
         try:
             player_id = str(request.data.get("player_id"))
