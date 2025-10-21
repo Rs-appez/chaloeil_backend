@@ -1,0 +1,35 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>I love stats</title>
+        <link href="{% static "stats/css/index.css" %}" rel="stylesheet" />
+    </head>
+    <body>
+        <div class="header">
+            <h1>I love stats!</h1>
+        </div>
+        <table class="stats-table">
+            <thead>
+                <tr>
+                    <th>Statistic</th>
+                    <th>Question</th>
+                    <th>Image</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for q, stat in data %}
+                    <tr>
+                        <td>{{ stat }}%</td>
+                        <td>{{ q }}</td>
+                        <td>
+                            <img src="{{ q.image_url }}" alt="">
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </body>
+</html>
