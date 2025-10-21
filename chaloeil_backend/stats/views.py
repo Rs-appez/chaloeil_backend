@@ -2,12 +2,11 @@ from django.shortcuts import render
 
 from question.models import QuestionsOfTheDay, QuestionsOfTheDayQuestion
 from .models import Statistic
-from .utils import get_pourcentage
 
 
 def index(request):
-    stats = Statistic.objects.select_related("question")
-    data = get_pourcentage(stats)
+    stats = Statistic.objects.all()
+    data = Statistic.get_pourcentage(stats)
     return render(request, "index1.html", {"data": data})
 
 
@@ -22,6 +21,6 @@ def qotd_stats(request):
 
     stats = Statistic.objects.filter(
         question__in=[q.question for q in questions]
-    ).select_related("question")
-    data = get_pourcentage(stats)
+    )
+    data = Statistic.get_pourcentage(stats)
     return render(request, "index1.html", {"data": data})
