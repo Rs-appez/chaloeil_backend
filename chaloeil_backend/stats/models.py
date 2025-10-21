@@ -116,24 +116,30 @@ class Statistic(models.Model):
         self.save()
 
     @staticmethod
-    def get_pourcentage(stats: QuerySet["Statistic"]) -> list[tuple[Question, float]]:
-        aggregated = stats.values("question__id", "question__question_text").annotate(
-            total_correct=Sum("correct_count"), total_asked=Sum("asked_count")
-        )
+    def get_pourcentage(
+        stats: QuerySet["Statistic"],
+    ) -> list[dict[str, object]]:
+        aggregated = stats.values(
+            "question",
+        ).annotate(total_correct=Sum("correct_count"), total_asked=Sum("asked_count"))
 
+        question_ids = {stat["question"] for stat in aggregated}
+        questions_map = {q.id: q for q in Question.objects.filter(id__in=question_ids)}
         results = [
-            (
-                stat["question__question_text"],
-                (
+            {
+                "question": questions_map[stat["question"]].question_text,
+                "percentage": (
                     stat["total_correct"] / stat["total_asked"] * 100.0
                     if stat["total_asked"]
                     else 0.0
                 ),
-            )
+                "image": questions_map[stat["question"]].get_image_url(),
+                "level": questions_map[stat["question"]].level.level_text,
+            }
             for stat in aggregated
         ]
 
-        return sorted(results, key=lambda item: item[1], reverse=True)
+        return sorted(results, key=lambda item: item["percentage"], reverse=True)
 
 
 class PlayerQotd(models.Model):
