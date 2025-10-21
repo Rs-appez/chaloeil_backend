@@ -1,6 +1,6 @@
 from django.shortcuts import render
 
-from question.models import QuestionsOfTheDay, QuestionsOfTheDayQuestion
+from question.models import QuestionsOfTheDay
 from .models import Statistic
 
 
