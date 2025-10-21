@@ -94,8 +94,6 @@ class Statistic(models.Model):
     correct_count = models.PositiveIntegerField(default=0)
     incorrect_count = models.PositiveIntegerField(default=0)
 
-    answers = models.ManyToManyField(AnswerSelected, related_name="statistics")
-
     def __str__(self) -> str:
         return f"Statistics for {self.player} on {self.question.question_text}"
 
@@ -113,6 +111,7 @@ class Statistic(models.Model):
             )
             answer_selected.number_of_times += 1
             answer_selected.save()
+
         self.save()
 
     @staticmethod
