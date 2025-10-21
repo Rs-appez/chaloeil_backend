@@ -15,12 +15,8 @@ def qotd_stats(request):
     if not qotd:
         return render(request, "index1.html", {"data": []})
 
-    questions = QuestionsOfTheDayQuestion.objects.filter(
-        questions_of_the_day=qotd
-    ).select_related("question")
-
     stats = Statistic.objects.filter(
-        question__in=[q.question for q in questions]
+        question__questionsofthedayquestion__questions_of_the_day=qotd
     )
     data = Statistic.get_pourcentage(stats)
     return render(request, "index1.html", {"data": data})
