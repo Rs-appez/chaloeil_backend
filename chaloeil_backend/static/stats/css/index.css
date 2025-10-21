@@ -96,6 +96,11 @@ button {
   border-bottom: none;
 }
 
+.stats-table th:nth-child(-n + 3),
+.stats-table td:nth-child(-n + 3) {
+  width: 10%;
+}
+
 img {
   max-width: 100px;
   max-height: 100px;
