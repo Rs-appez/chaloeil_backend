@@ -29,6 +29,7 @@ class QuestionSerializer(serializers.ModelSerializer):
     categories = serializers.StringRelatedField(many=True)
     answers = AnswerSerializer(many=True)
     level = serializers.StringRelatedField(many=False)
+    image_url = serializers.SerializerMethodField()
 
     class Meta:
         model = Question
@@ -41,6 +42,9 @@ class QuestionSerializer(serializers.ModelSerializer):
             "image_url",
             "shuffle_answers",
         ]
+
+    def get_image_url(self, obj):
+        return obj.get_image_url()
 
 
 class CategorySerializer(serializers.ModelSerializer):

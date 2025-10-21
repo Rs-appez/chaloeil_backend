@@ -1,5 +1,6 @@
 from django.db import models
 from typing import List
+from chaloeil_backend.storage_backends import QuestionMediaStorage, rename_file
 
 
 class Question(models.Model):
@@ -7,10 +8,18 @@ class Question(models.Model):
     categories = models.ManyToManyField("Category")
     level = models.ForeignKey("Level", on_delete=models.PROTECT)
     image_url = models.CharField(max_length=200, blank=True, null=True)
+    image = models.ImageField(
+        upload_to=rename_file, storage=QuestionMediaStorage(), blank=True, null=True
+    )
     shuffle_answers = models.BooleanField(default=True)
 
     def __str__(self) -> str:
         return self.question_text
+
+    def get_image_url(self) -> str:
+        if self.image:
+            return self.image.url
+        return self.image_url
 
 
 class Answer(models.Model):
@@ -64,9 +73,9 @@ class QuestionsOfTheDay(models.Model):
 
     def __get_random_questions_not_in_qotd(self, count: int) -> List[Question]:
         used_questions = QuestionsOfTheDayQuestion.objects.all().values("question")
-        questions = Question.objects.exclude(id__in=used_questions).order_by(
-            "?"
-        )[:count]
+        questions = Question.objects.exclude(id__in=used_questions).order_by("?")[
+            :count
+        ]
         return questions
 
 
