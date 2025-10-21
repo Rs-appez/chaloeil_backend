@@ -115,6 +115,11 @@ class Statistic(models.Model):
             answer_selected.save()
         self.save()
 
+    def get_correct_percentage(self) -> float:
+        if self.asked_count == 0:
+            return 0.0
+        return (self.correct_count / self.asked_count) * 100.0
+
 
 class PlayerQotd(models.Model):
     player = models.ForeignKey(Player, on_delete=models.CASCADE)
