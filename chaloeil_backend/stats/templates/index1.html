@@ -22,7 +22,7 @@
             <tbody>
                 {% for q, stat in data %}
                     <tr>
-                        <td>{{ stat }}%</td>
+                        <td>{{ stat|floatformat:2 }}%</td>
                         <td>{{ q }}</td>
                         <td>
                             <img src="{{ q.image_url }}" alt="">
