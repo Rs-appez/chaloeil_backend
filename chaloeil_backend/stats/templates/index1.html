@@ -15,18 +15,20 @@
             <thead>
                 <tr>
                     <th>Statistic</th>
-                    <th>Question</th>
+                    <th>Level</th>
                     <th>Image</th>
+                    <th>Question</th>
                 </tr>
             </thead>
             <tbody>
-                {% for q, stat in data %}
+                {% for q in data %}
                     <tr>
-                        <td>{{ stat|floatformat:2 }}%</td>
-                        <td>{{ q }}</td>
+                        <td>{{ q.percentage|floatformat:2 }}%</td>
+                        <td>{{ q.level }}</td>
                         <td>
-                            <img src="{{ q.image_url }}" alt="">
+                            <img src="{{ q.image }}" alt="">
                         </td>
+                        <td>{{ q.question }}</td>
                     </tr>
                 {% endfor %}
             </tbody>
