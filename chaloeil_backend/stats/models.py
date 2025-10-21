@@ -123,7 +123,7 @@ class Statistic(models.Model):
         return (self.correct_count / self.asked_count) * 100.0
 
     @staticmethod
-    def get_pourcentage(stats: QuerySet):
+    def get_pourcentage(stats: QuerySet["Statistic"]) -> list[tuple[Question, float]]:
         grouped = defaultdict(list)
         for stat in stats:
             grouped[stat.question].append(stat)
