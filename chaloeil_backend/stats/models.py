@@ -1,7 +1,5 @@
-from collections import defaultdict
-
 from django.db import models
-from django.db.models import QuerySet
+from django.db.models import QuerySet, Sum
 from question.models import Answer, Question, QuestionsOfTheDay
 
 
@@ -117,24 +115,25 @@ class Statistic(models.Model):
             answer_selected.save()
         self.save()
 
-    def get_correct_percentage(self) -> float:
-        if self.asked_count == 0:
-            return 0.0
-        return (self.correct_count / self.asked_count) * 100.0
-
     @staticmethod
     def get_pourcentage(stats: QuerySet["Statistic"]) -> list[tuple[Question, float]]:
-        grouped = defaultdict(list)
-        for stat in stats:
-            grouped[stat.question].append(stat)
+        aggregated = stats.values("question__id", "question__question_text").annotate(
+            total_correct=Sum("correct_count"), total_asked=Sum("asked_count")
+        )
 
-        questions = {}
-        for question, stat_list in grouped.items():
-            questions[question] = sum(
-                [stat.get_correct_percentage() for stat in stat_list]
-            ) / len(stat_list)
+        results = [
+            (
+                stat["question__question_text"],
+                (
+                    stat["total_correct"] / stat["total_asked"] * 100.0
+                    if stat["total_asked"]
+                    else 0.0
+                ),
+            )
+            for stat in aggregated
+        ]
 
-        return sorted(questions.items(), key=lambda item: item[1], reverse=True)
+        return sorted(results, key=lambda item: item[1], reverse=True)
 
 
 class PlayerQotd(models.Model):
