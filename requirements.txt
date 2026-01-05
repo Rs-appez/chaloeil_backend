@@ -1,7 +1,7 @@
 asgiref==3.11.0
-boto3==1.42.17
-botocore==1.42.17
-dj-database-url==3.0.1
+boto3==1.42.21
+botocore==1.42.21
+dj-database-url==3.1.0
 Django==6.0
 django-crontab==0.7.1
 django-filter==25.2
@@ -12,7 +12,7 @@ Markdown==3.10
 jmespath==1.0.1
 packaging==25.0
 psycopg2==2.9.11
-pillow==12.0.0
+pillow==12.1.0
 python-dateutil==2.9.0.post0
 python-decouple==3.8
 pytz==2025.2
