@@ -1,13 +1,13 @@
-asgiref==3.11.0
-boto3==1.42.39
-botocore==1.42.39
+asgiref==3.11.1
+boto3==1.42.44
+botocore==1.42.44
 dj-database-url==3.1.0
 Django==6.0.2
 django-crontab==0.7.1
 django-filter==25.2
 django-storages==1.14.6
 djangorestframework==3.16.1
-gunicorn==25.0.0
+gunicorn==25.0.3
 Markdown==3.10.1
 jmespath==1.1.0
 packaging==26.0
