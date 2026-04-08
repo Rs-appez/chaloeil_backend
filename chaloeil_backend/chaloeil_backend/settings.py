@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     "question.apps.QuestionConfig",
     "chaloeil_backend",
     "stats",
+    "almanax",
 ]
 
 MIDDLEWARE = [
