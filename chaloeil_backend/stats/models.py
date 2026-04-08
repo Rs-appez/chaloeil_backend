@@ -1,3 +1,4 @@
+from typing import override
 from django.db import models
 from django.db.models import QuerySet, Sum
 from question.models import Answer, Question, QuestionsOfTheDay
@@ -26,6 +27,7 @@ class Participant(models.Model):
             return self.team
         return self  # Fallback to Participant
 
+    @override
     def __str__(self) -> str:
         return f"{self.get_real_instance()}"
 
@@ -34,6 +36,7 @@ class Player(Participant):
     discord_id = models.CharField(max_length=32, unique=True)
     name = models.CharField(max_length=100)
 
+    @override
     def __str__(self) -> str:
         return f"{self.name} - ({self.discord_id})"
 
@@ -41,14 +44,16 @@ class Player(Participant):
 class TeamName(models.Model):
     name = models.CharField(max_length=100, unique=True)
 
+    @override
     def __str__(self) -> str:
-        return self.name
+        return str(self.name)
 
 
 class Team(Participant):
     players = models.ManyToManyField(Player, related_name="teams")
     names = models.ManyToManyField(TeamName, related_name="teams")
 
+    @override
     def __str__(self) -> str:
         return f"Team with {[', '.join(player.name for player in self.players.all())]}"
 
