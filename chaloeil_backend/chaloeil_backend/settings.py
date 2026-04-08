@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     "question.apps.QuestionConfig",
     "chaloeil_backend",
     "stats",
+    "almanax",
 ]
 
 MIDDLEWARE = [
@@ -155,7 +156,9 @@ AWS_STORAGE_BUCKET_NAME = config("AWS_STORAGE_BUCKET_NAME", default="")
 AWS_ACCESS_KEY_ID = config("AWS_ACCESS_KEY_ID", default="")
 AWS_SECRET_ACCESS_KEY = config("AWS_SECRET_ACCESS_KEY", default="")
 AWS_S3_ENDPOINT_URL = (
-    "https://" + config("AWS_S3_ENDPOINT_URL", default="") + ".s3.eu-west-3.amazonaws.com"
+    "https://"
+    + config("AWS_S3_ENDPOINT_URL", default="")
+    + ".s3.eu-west-3.amazonaws.com"
 )
 AWS_S3_OBJECT_PARAMETERS = {
     "CacheControl": "max-age=86400",
