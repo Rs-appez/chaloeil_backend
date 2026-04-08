@@ -31,7 +31,7 @@ class AlmanaxEntry(models.Model):
 
     @override
     def __str__(self) -> str:
-        return f"Almanax Entry for {self.date}"
+        return f"Almanax Entry for {self.day}/{self.month}"
 
 
 class EconomyEntry(AlmanaxEntry):
