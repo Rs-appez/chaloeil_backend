@@ -23,7 +23,7 @@ class Job(Enum):
 class AlmanaxEntry(models.Model):
     day = models.PositiveSmallIntegerField()
     month = models.PositiveSmallIntegerField()
-    bonus = models.CharField(max_length=255)
+    bonus = models.CharField(max_length=510)
     resource = models.CharField(max_length=255)
     resource_quantity = models.SmallIntegerField()
     resource_image_url = models.URLField(max_length=500, blank=True, null=True)
