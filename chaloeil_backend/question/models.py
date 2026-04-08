@@ -1,5 +1,4 @@
 from django.db import models
-from typing import List
 from chaloeil_backend.storage_backends import QuestionMediaStorage, rename_file
 
 
@@ -71,7 +70,7 @@ class QuestionsOfTheDay(models.Model):
         self.number_of_questions = self.questions.count()
         super().save(update_fields=["number_of_questions"])
 
-    def __get_random_questions_not_in_qotd(self, count: int) -> List[Question]:
+    def __get_random_questions_not_in_qotd(self, count: int) -> list[Question]:
         used_questions = QuestionsOfTheDayQuestion.objects.all().values("question")
         questions = Question.objects.exclude(id__in=used_questions).order_by("?")[
             :count
