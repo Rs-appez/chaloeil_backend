@@ -1,8 +1,9 @@
 from uuid import uuid4
+from django.db.models import Model
 from storages.backends.s3boto3 import S3Boto3Storage
 
 
-def rename_file(instance, filename):
+def rename_file(instance: Model, filename: str) -> str:
     """
     Rename file name with UUID
     """
