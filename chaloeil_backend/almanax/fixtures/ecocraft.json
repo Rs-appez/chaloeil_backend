@@ -1,0 +1,254 @@
+[
+  {
+    "model": "almanax.almanaxentry",
+    "fields": {
+      "day": 2,
+      "month": 1,
+      "bonus": "Les Paysans économisent 15 % de leurs ingrédients lorsqu'ils fabriquent des objets.",
+      "resource": "Michette",
+      "resource_quantity": 4,
+      "resource_image_url": null,
+      "reward": 395
+    }
+  },
+  {
+    "model": "almanax.almanaxentry",
+    "fields": {
+      "day": 6,
+      "month": 2,
+      "bonus": "Les Forgerons économisent 15 % de leurs ingrédients lorsqu'ils fabriquent des objets.",
+      "resource": "Marteau de Boisaille",
+      "resource_quantity": 2,
+      "resource_image_url": null,
+      "reward": 769
+    }
+  },
+  {
+    "model": "almanax.almanaxentry",
+    "fields": {
+      "day": 16,
+      "month": 2,
+      "bonus": "Les Chasseurs économisent 15 % de leurs ingrédients lorsqu'ils fabriquent des objets.",
+      "resource": "Beignet Astrubien",
+      "resource_quantity": 6,
+      "resource_image_url": null,
+      "reward": 593
+    }
+  },
+  {
+    "model": "almanax.almanaxentry",
+    "fields": {
+      "day": 1,
+      "month": 3,
+      "bonus": "Les Bijoutiers économisent 15 % de leurs ingrédients lorsqu'ils fabriquent des objets.",
+      "resource": "La Chaîne Nhanor Kibrill",
+      "resource_quantity": 1,
+      "resource_image_url": null,
+      "reward": 769
+    }
+  },
+  {
+    "model": "almanax.almanaxentry",
+    "fields": {
+      "day": 12,
+      "month": 3,
+      "bonus": "Les Pêcheurs économisent 15 % de leurs ingrédients lorsqu'ils fabriquent des objets.",
+      "resource": "Poisson Pané Frit",
+      "resource_quantity": 3,
+      "resource_image_url": null,
+      "reward": 1737
+    }
+  },
+  {
+    "model": "almanax.almanaxentry",
+    "fields": {
+      "day": 10,
+      "month": 5,
+      "bonus": "Les Éleveurs économisent 15% de leurs ingrédients lorsqu'ils fabriquent des objets.",
+      "resource": "Petit Extrait de Baffeur",
+      "resource_quantity": 5,
+      "resource_image_url": null,
+      "reward": 2462
+    }
+  },
+  {
+    "model": "almanax.almanaxentry",
+    "fields": {
+      "day": 20,
+      "month": 5,
+      "bonus": "Les Façonneurs économisent 15 % de leurs ingrédients lorsqu'ils fabriquent des objets.",
+      "resource": "Bouclier Tonbarien",
+      "resource_quantity": 1,
+      "resource_image_url": null,
+      "reward": 769
+    }
+  },
+  {
+    "model": "almanax.almanaxentry",
+    "fields": {
+      "day": 14,
+      "month": 6,
+      "bonus": "Les Bricoleurs ont 15 % de chances d'économiser des ingrédients lorsqu'ils fabriquent des objets.",
+      "resource": "Clef des Champs",
+      "resource_quantity": 1,
+      "resource_image_url": null,
+      "reward": 769
+    }
+  },
+  {
+    "model": "almanax.almanaxentry",
+    "fields": {
+      "day": 3,
+      "month": 7,
+      "bonus": "Les Alchimistes ont 15 % de chances d'économiser des ingrédients lorsqu'ils fabriquent des objets.",
+      "resource": "Potion Raide Dite",
+      "resource_quantity": 3,
+      "resource_image_url": null,
+      "reward": 747
+    }
+  },
+  {
+    "model": "almanax.almanaxentry",
+    "fields": {
+      "day": 8,
+      "month": 8,
+      "bonus": "Les Mineurs ont 15 % de chances d'économiser des ingrédients lorsqu'ils fabriquent des objets.",
+      "resource": "Aluminite",
+      "resource_quantity": 1,
+      "resource_image_url": null,
+      "reward": 395
+    }
+  },
+  {
+    "model": "almanax.almanaxentry",
+    "fields": {
+      "day": 27,
+      "month": 10,
+      "bonus": "Les Sculpteurs économisent 15 % de leurs ingrédients lorsqu'ils fabriquent des objets.",
+      "resource": "Bâton Feuillu",
+      "resource_quantity": 1,
+      "resource_image_url": null,
+      "reward": 769
+    }
+  },
+  {
+    "model": "almanax.almanaxentry",
+    "fields": {
+      "day": 3,
+      "month": 11,
+      "bonus": "Les Tailleurs ont 15 % de chances d'économiser des ingrédients lorsqu'ils fabriquent des objets.",
+      "resource": "Cape Abilité",
+      "resource_quantity": 1,
+      "resource_image_url": null,
+      "reward": 769
+    }
+  },
+  {
+    "model": "almanax.almanaxentry",
+    "fields": {
+      "day": 19,
+      "month": 11,
+      "bonus": "Les Bûcherons économisent 15 % de leurs ingrédients lorsqu'ils fabriquent des objets.",
+      "resource": "Substrat de Bocage",
+      "resource_quantity": 1,
+      "resource_image_url": null,
+      "reward": 3562
+    }
+  },
+  {
+    "model": "almanax.almanaxentry",
+    "fields": {
+      "day": 11,
+      "month": 12,
+      "bonus": "Les Cordonniers économisent 15 % de leurs ingrédients lorsqu'ils fabriquent des objets.",
+      "resource": "Pacmabottes",
+      "resource_quantity": 2,
+      "resource_image_url": null,
+      "reward": 769
+    }
+  },
+  {
+    "model": "almanax.economyentry",
+    "fields": {
+      "job": "Farmer"
+    }
+  },
+  {
+    "model": "almanax.economyentry",
+    "fields": {
+      "job": "Smith"
+    }
+  },
+  {
+    "model": "almanax.economyentry",
+    "fields": {
+      "job": "Hunter"
+    }
+  },
+  {
+    "model": "almanax.economyentry",
+    "fields": {
+      "job": "Jeweller"
+    }
+  },
+  {
+    "model": "almanax.economyentry",
+    "fields": {
+      "job": "Fisherman"
+    }
+  },
+  {
+    "model": "almanax.economyentry",
+    "fields": {
+      "job": "Breeder"
+    }
+  },
+  {
+    "model": "almanax.economyentry",
+    "fields": {
+      "job": "Artificer"
+    }
+  },
+  {
+    "model": "almanax.economyentry",
+    "fields": {
+      "job": "Handyman"
+    }
+  },
+  {
+    "model": "almanax.economyentry",
+    "fields": {
+      "job": "Alchemist"
+    }
+  },
+  {
+    "model": "almanax.economyentry",
+    "fields": {
+      "job": "Miner"
+    }
+  },
+  {
+    "model": "almanax.economyentry",
+    "fields": {
+      "job": "Carver"
+    }
+  },
+  {
+    "model": "almanax.economyentry",
+    "fields": {
+      "job": "Tailor"
+    }
+  },
+  {
+    "model": "almanax.economyentry",
+    "fields": {
+      "job": "Lumberjack"
+    }
+  },
+  {
+    "model": "almanax.economyentry",
+    "fields": {
+      "job": "Shoemaker"
+    }
+  }
+]
