@@ -30,7 +30,6 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "whitenoise.runserver_nostatic",
     "django.contrib.staticfiles",
-    "django_crontab",
     "rest_framework",
     "rest_framework.authtoken",
     "question.apps.QuestionConfig",
