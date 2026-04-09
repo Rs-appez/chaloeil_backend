@@ -1,5 +1,5 @@
 from rest_framework import viewsets
-from rest_framework.permissions import IsAdminUser
+from rest_framework.permissions import DjangoModelPermissions
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.request import Request
@@ -11,9 +11,9 @@ from .serializers import EconomyEntrySerializer
 class EconomyEntryViewSet(viewsets.ModelViewSet[EconomyEntry]):
     queryset = EconomyEntry.objects.all()
     serializer_class = EconomyEntrySerializer
-    permission_classes = [IsAdminUser]
+    permission_classes = [DjangoModelPermissions]
 
-    @action(detail=False, methods=["get"], permission_classes=[IsAdminUser])
+    @action(detail=False, methods=["get"], permission_classes=[DjangoModelPermissions])
     def get_job(self, request: Request) -> Response:
         job = request.query_params.get("job", "").strip().capitalize()
         if job not in [job.value for job in Job]:
