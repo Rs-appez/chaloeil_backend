@@ -11,22 +11,23 @@ RUN apt-get update && apt-get install -y \
     gcc \
     && rm -rf /var/lib/apt/lists/*
 
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+
 RUN mkdir -p /code
 
 WORKDIR /code
 
-COPY requirements.txt /tmp/requirements.txt
-RUN set -ex && \
-    pip install --upgrade pip && \
-    pip install -r /tmp/requirements.txt && \
-    rm -rf /root/.cache/
+COPY pyproject.toml uv.lock /code/
+RUN uv sync --frozen --no-dev --no-install-project
+
 COPY . /code
+RUN uv sync --frozen --no-dev
 
 WORKDIR /code/chaloeil_backend
 
 ENV DATABASE_URL ""
 ENV SECRET_KEY "non-secret-key-for-building-purposes"
-RUN python manage.py collectstatic --noinput
+RUN uv run python manage.py collectstatic --noinput
 
 EXPOSE 8000
 
