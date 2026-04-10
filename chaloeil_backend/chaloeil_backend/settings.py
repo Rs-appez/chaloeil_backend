@@ -20,6 +20,10 @@ ALLOWED_HOSTS = [config("BACKEND_HOST", default="127.0.0.1")]
 
 CSRF_TRUSTED_ORIGINS = ["https://" + config("BACKEND_HOST", default="")]
 
+USE_X_FORWARDED_HOST = True
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
+
 # Application definition
 
 INSTALLED_APPS = [
