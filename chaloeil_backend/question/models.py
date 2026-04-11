@@ -1,5 +1,7 @@
-from django.db import models
+from typing import override
+
 from chaloeil_backend.storage_backends import QuestionMediaStorage, rename_file
+from django.db import models
 
 
 class Question(models.Model):
@@ -12,6 +14,7 @@ class Question(models.Model):
     )
     shuffle_answers = models.BooleanField(default=True)
 
+    @override
     def __str__(self) -> str:
         return self.question_text
 
@@ -29,6 +32,7 @@ class Answer(models.Model):
     is_correct = models.BooleanField(default=False)
     emoticon = models.CharField(max_length=100, blank=True, null=True)
 
+    @override
     def __str__(self) -> str:
         return self.answer_text
 
@@ -36,6 +40,7 @@ class Answer(models.Model):
 class Category(models.Model):
     category_text = models.CharField(max_length=200, unique=True)
 
+    @override
     def __str__(self) -> str:
         return self.category_text
 
@@ -43,18 +48,23 @@ class Category(models.Model):
 class Level(models.Model):
     level_text = models.CharField(max_length=200, unique=True)
 
+    @override
     def __str__(self) -> str:
         return self.level_text
 
 
 class QuestionsOfTheDay(models.Model):
-    number_of_questions = models.PositiveIntegerField(default=20)
-    time_to_answer_hour = models.PositiveIntegerField(default=8)
+    number_of_questions: models.PositiveSmallIntegerField[int, int] = (
+        models.PositiveSmallIntegerField(default=20)
+    )
+    time_to_answer_hour = models.PositiveSmallIntegerField(default=8)
     date = models.DateTimeField(auto_now_add=True)
 
+    @override
     def __str__(self) -> str:
         return f"{self.date}"
 
+    @override
     def save(self, *args, **kwargs):
         is_new = self.pk is None
         super().save(*args, **kwargs)
@@ -63,15 +73,19 @@ class QuestionsOfTheDay(models.Model):
                 self.number_of_questions
             )
             for idx, question in enumerate(questions):
-                QuestionsOfTheDayQuestion.objects.create(
+                _ = QuestionsOfTheDayQuestion.objects.create(
                     questions_of_the_day=self, question=question, order=idx
                 )
 
         self.number_of_questions = self.questions.count()
         super().save(update_fields=["number_of_questions"])
 
-    def __get_random_questions_not_in_qotd(self, count: int) -> list[Question]:
-        used_questions = QuestionsOfTheDayQuestion.objects.all().values("question")
+    def __get_random_questions_not_in_qotd(
+        self, count: int
+    ) -> models.QuerySet[Question]:
+        used_questions = QuestionsOfTheDayQuestion.objects.all().values_list(
+            "question_id", flat=True
+        )
         questions = Question.objects.exclude(id__in=used_questions).order_by("?")[
             :count
         ]
@@ -88,5 +102,6 @@ class QuestionsOfTheDayQuestion(models.Model):
     class Meta:
         ordering = ["order"]
 
+    @override
     def __str__(self) -> str:
         return f"{self.questions_of_the_day} - {self.question.question_text}"
