@@ -72,24 +72,31 @@ class QuestionsOfTheDay(models.Model):
             questions = self.__get_random_questions_not_in_qotd(
                 self.number_of_questions
             )
-            for idx, question in enumerate(questions):
-                _ = QuestionsOfTheDayQuestion.objects.create(
-                    questions_of_the_day=self, question=question, order=idx
+            objects = [
+                QuestionsOfTheDayQuestion(
+                    questions_of_the_day=self,
+                    question=question,
+                    order=idx,
                 )
-
-        self.number_of_questions = self.questions.count()
+                for idx, question in enumerate(questions)
+            ]
+            _ = QuestionsOfTheDayQuestion.objects.bulk_create(objects)
+            self.number_of_questions = len(objects)
+        else:
+            self.number_of_questions = self.__get_nb_questions_in_qotd()
         super().save(update_fields=["number_of_questions"])
 
-    def __get_random_questions_not_in_qotd(
-        self, count: int
-    ) -> models.QuerySet[Question]:
-        used_questions = QuestionsOfTheDayQuestion.objects.all().values_list(
-            "question_id", flat=True
+    def __get_random_questions_not_in_qotd(self, count: int) -> list[Question]:
+        return list(
+            Question.objects.exclude(
+                id__in=QuestionsOfTheDayQuestion.objects.values("question_id")
+            ).order_by("?")[:count]
         )
-        questions = Question.objects.exclude(id__in=used_questions).order_by("?")[
-            :count
-        ]
-        return questions
+
+    def __get_nb_questions_in_qotd(self) -> int:
+        return QuestionsOfTheDayQuestion.objects.filter(
+            questions_of_the_day=self
+        ).count()
 
 
 class QuestionsOfTheDayQuestion(models.Model):
