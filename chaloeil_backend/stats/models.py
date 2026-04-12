@@ -170,3 +170,15 @@ class QotdStatistic(models.Model):
     def increment_score(self, points: int):
         self.score += points
         self.save()
+
+
+class FlagReport(models.Model):
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    player = models.ForeignKey(Player, on_delete=models.SET_NULL, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    @override
+    def __str__(self) -> str:
+        return (
+            f"FlagReport for {self.question.question_text} - reported by {self.player}"
+        )
