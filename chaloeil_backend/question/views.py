@@ -44,7 +44,7 @@ class QuestionViewSet(viewsets.ModelViewSet[Question]):
             except Exception:
                 return Response({"error": "id_range parameter is invalid"}, status=400)
         else:
-            questions = Question.objects.all()
+            questions = Question.objects.exclude(need_review=True)
             if category:
                 questions = questions.filter(categories__category_text__iexact=category)
             question = questions.order_by("?")[:nb]
