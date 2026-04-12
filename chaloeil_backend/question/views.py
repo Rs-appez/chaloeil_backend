@@ -106,6 +106,13 @@ class QuestionViewSet(viewsets.ModelViewSet[Question]):
 
         return Response(serializer.data)
 
+    @action(detail=True, methods=["post"], permission_classes=[IsAdminUser])
+    def flag_for_review(self, request, pk=None):
+        question = self.get_object()
+        question.need_review = True
+        question.save()
+        return Response({"message": "Question flagged for review successfully"})
+
 
 class CategoryViewSet(viewsets.ReadOnlyModelViewSet[Category]):
     queryset = Category.objects.all()
