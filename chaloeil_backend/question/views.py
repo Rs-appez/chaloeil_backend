@@ -10,7 +10,7 @@ from rest_framework.permissions import (
 )
 from rest_framework.response import Response
 from rest_framework.request import Request
-from stats.models import PlayerQotd
+from stats.models import FlagReport, Player, PlayerQotd
 
 from .models import Answer, Category, Question, QuestionsOfTheDay
 from .serializers import (
@@ -108,10 +108,20 @@ class QuestionViewSet(viewsets.ModelViewSet[Question]):
         return Response(serializer.data)
 
     @action(detail=True, methods=["post"], permission_classes=[IsAdminUser])
-    def flag_for_review(self, request, pk=None):
+    def flag_for_review(self, request: Request, pk=None):
+        player_id = request.data.get("player_id", None)
+        if not player_id:
+            return Response({"error": "User parameter is required"}, status=400)
+
+        player = Player.objects.filter(discord_id=player_id).first()
+        if not player:
+            return Response({"error": "Player not found"}, status=404)
+
         question = self.get_object()
         question.need_review = True
-        question.save()
+        question.save(update_fields=["need_review"])
+        _ = FlagReport.objects.create(question=question, player=player)
+
         return Response({"message": "Question flagged for review successfully"})
 
 
