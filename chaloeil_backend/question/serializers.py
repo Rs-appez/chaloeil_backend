@@ -47,6 +47,12 @@ class QuestionSerializer(serializers.ModelSerializer):
         return obj.get_image_url()
 
 
+class SimpleQuestionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Question
+        fields = ["id", "question_text"]
+
+
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
