@@ -17,6 +17,7 @@ from .serializers import (
     CategorySerializer,
     QuestionSerializer,
     QuestionsOfTheDaySerializer,
+    SimpleQuestionSerializer,
 )
 
 
@@ -82,14 +83,9 @@ class QuestionViewSet(viewsets.ModelViewSet[Question]):
         permission_classes=[IsAuthenticated],
     )
     def get_questions_without_answer(self, request, _=None):
-        questions = Question.objects.all()
-        questions_without_answers = [
-            question
-            for question in questions
-            if all(answer.is_correct is False for answer in question.answers.all())
-        ]
-        serializer = QuestionSerializer(
-            questions_without_answers, context={"request": request}, many=True
+        questions = Question.objects.exclude(answers__is_correct=True)
+        serializer = SimpleQuestionSerializer(
+            questions, context={"request": request}, many=True
         )
         return Response(serializer.data)
 
