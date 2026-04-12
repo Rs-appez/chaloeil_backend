@@ -20,4 +20,5 @@ dependencies = [
 dev = [
     "django-stubs>=6.0.2",
     "djangorestframework-stubs>=3.16.9",
+    "python-decouple-stubs>=3.8.0.4",
 ]
