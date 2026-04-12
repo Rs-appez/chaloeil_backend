@@ -37,17 +37,17 @@ class QuestionViewSet(viewsets.ModelViewSet[Question]):
         nb = int(request.query_params.get("number", "1"))
         id_range = request.query_params.get("id_range")
 
+        questions = Question.objects.exclude(need_review=True)
         if id_range:
             try:
                 id_range = id_range.split("-")
-                question = Question.objects.filter(id__range=(id_range[0], id_range[1]))
+                questions = questions.filter(id__range=(id_range[0], id_range[1]))
             except Exception:
                 return Response({"error": "id_range parameter is invalid"}, status=400)
-        else:
-            questions = Question.objects.exclude(need_review=True)
-            if category:
-                questions = questions.filter(categories__category_text__iexact=category)
-            question = questions.order_by("?")[:nb]
+        if category:
+            questions = questions.filter(categories__category_text__iexact=category)
+
+        question = questions.order_by("?")[:nb]
 
         serializer = QuestionSerializer(
             question, context={"request": request}, many=True
