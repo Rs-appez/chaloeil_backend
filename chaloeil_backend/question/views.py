@@ -20,7 +20,7 @@ from .serializers import (
 )
 
 
-class QuestionViewSet(viewsets.ModelViewSet):
+class QuestionViewSet(viewsets.ModelViewSet[Question]):
     permission_classes = [IsAdminUser]
     queryset = Question.objects.all()
     serializer_class = QuestionSerializer
@@ -31,7 +31,7 @@ class QuestionViewSet(viewsets.ModelViewSet):
         url_path="random_question",
         permission_classes=[IsAuthenticated],
     )
-    def get_random_question(self, request, pk=None):
+    def get_random_question(self, request, _=None):
         category = request.query_params.get("category")
         nb = int(request.query_params.get("number", "1"))
         id_range = request.query_params.get("id_range")
@@ -62,7 +62,7 @@ class QuestionViewSet(viewsets.ModelViewSet):
         url_path="questions_with",
         permission_classes=[IsAuthenticated],
     )
-    def get_questions_with(self, request, pk=None):
+    def get_questions_with(self, request, _=None):
         text = request.query_params.get("text")
 
         if not text:
@@ -81,7 +81,7 @@ class QuestionViewSet(viewsets.ModelViewSet):
         url_path="questions_without_answer",
         permission_classes=[IsAuthenticated],
     )
-    def get_questions_without_answer(self, request, pk=None):
+    def get_questions_without_answer(self, request, _=None):
         questions = Question.objects.all()
         questions_without_answers = [
             question
@@ -99,7 +99,7 @@ class QuestionViewSet(viewsets.ModelViewSet):
         url_path="questions_with_image",
         permission_classes=[IsAuthenticated],
     )
-    def get_questions_with_image(self, request, pk=None):
+    def get_questions_with_image(self, request, _=None):
         url = (
             request.query_params.get("url")
             if request.query_params.get("url") is not None
@@ -114,18 +114,18 @@ class QuestionViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
+class CategoryViewSet(viewsets.ReadOnlyModelViewSet[Category]):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
 
-class AnswerViewSet(viewsets.ModelViewSet):
+class AnswerViewSet(viewsets.ModelViewSet[Answer]):
     permission_classes = [IsAdminUser]
     queryset = Answer.objects.all()
     serializer_class = AnswerSerializer
 
 
-class QuestionsOfTheDayViewSet(viewsets.ModelViewSet):
+class QuestionsOfTheDayViewSet(viewsets.ModelViewSet[QuestionsOfTheDay]):
     permission_classes = [IsAdminUser]
     queryset = QuestionsOfTheDay.objects.all()
     serializer_class = QuestionsOfTheDaySerializer
@@ -136,7 +136,7 @@ class QuestionsOfTheDayViewSet(viewsets.ModelViewSet):
         url_path="qotd",
         permission_classes=[DjangoModelPermissions],
     )
-    def get_qotd(self, request, pk=None):
+    def get_qotd(self, request, _=None):
         """
         Get the Questions of the Day
         """
@@ -173,14 +173,16 @@ class QuestionsOfTheDayViewSet(viewsets.ModelViewSet):
         url_path="generate_qotd",
         permission_classes=[DjangoModelPermissions],
     )
-    def generate_qotd(self, request, pk=None):
+    def generate_qotd(self, request, _=None):
         """
         Generate Questions of the Day.
         """
         try:
             number_of_questions = random.randint(8, 12)
 
-            QuestionsOfTheDay.objects.create(number_of_questions=number_of_questions)
+            _ = QuestionsOfTheDay.objects.create(
+                number_of_questions=number_of_questions
+            )
 
             return Response(
                 {"message": "Questions of the Day generated successfully"}, status=201
