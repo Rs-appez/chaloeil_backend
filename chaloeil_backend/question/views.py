@@ -32,7 +32,7 @@ class QuestionViewSet(viewsets.ModelViewSet[Question]):
         url_path="random_question",
         permission_classes=[IsAuthenticated],
     )
-    def get_random_question(self, request, _=None):
+    def get_random_question(self, request):
         category = request.query_params.get("category")
         nb = int(request.query_params.get("number", "1"))
         id_range = request.query_params.get("id_range")
@@ -60,7 +60,7 @@ class QuestionViewSet(viewsets.ModelViewSet[Question]):
         url_path="questions_with",
         permission_classes=[IsAuthenticated],
     )
-    def get_questions_with(self, request, _=None):
+    def get_questions_with(self, request):
         text = request.query_params.get("text")
 
         if not text:
@@ -79,7 +79,7 @@ class QuestionViewSet(viewsets.ModelViewSet[Question]):
         url_path="questions_without_answer",
         permission_classes=[IsAuthenticated],
     )
-    def get_questions_without_answer(self, request, _=None):
+    def get_questions_without_answer(self, request):
         questions = Question.objects.exclude(answers__is_correct=True)
         serializer = SimpleQuestionSerializer(
             questions, context={"request": request}, many=True
@@ -92,7 +92,7 @@ class QuestionViewSet(viewsets.ModelViewSet[Question]):
         url_path="questions_with_image",
         permission_classes=[IsAuthenticated],
     )
-    def get_questions_with_image(self, request, _=None):
+    def get_questions_with_image(self, request):
         url = (
             request.query_params.get("url")
             if request.query_params.get("url") is not None
