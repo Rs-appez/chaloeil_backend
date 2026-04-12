@@ -99,6 +99,7 @@ class Statistic(models.Model):
     correct_count = models.PositiveIntegerField(default=0)
     incorrect_count = models.PositiveIntegerField(default=0)
 
+    @override
     def __str__(self) -> str:
         return f"Statistics for {self.player} on {self.question.question_text}"
 
@@ -153,6 +154,7 @@ class PlayerQotd(models.Model):
     class Meta:
         unique_together = ("player", "question_of_the_day")
 
+    @override
     def __str__(self) -> str:
         return f"{self.player} - QOTD: {self.question_of_the_day}"
 
@@ -161,6 +163,7 @@ class QotdStatistic(models.Model):
     player = models.ForeignKey(Player, on_delete=models.CASCADE)
     score = models.PositiveIntegerField(default=0)
 
+    @override
     def __str__(self) -> str:
         return f"{self.player} - Score: {self.score}"
 
