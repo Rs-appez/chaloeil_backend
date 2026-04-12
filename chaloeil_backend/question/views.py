@@ -33,11 +33,7 @@ class QuestionViewSet(viewsets.ModelViewSet):
     )
     def get_random_question(self, request, pk=None):
         category = request.query_params.get("category")
-        nb = (
-            int(request.query_params.get("number"))
-            if request.query_params.get("number") is not None
-            else 1
-        )
+        nb = int(request.query_params.get("number", "1"))
         id_range = request.query_params.get("id_range")
 
         if id_range:
