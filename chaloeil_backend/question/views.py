@@ -9,6 +9,7 @@ from rest_framework.permissions import (
     IsAuthenticated,
 )
 from rest_framework.response import Response
+from rest_framework.request import Request
 from stats.models import PlayerQotd
 
 from .models import Answer, Category, Question, QuestionsOfTheDay
@@ -32,7 +33,7 @@ class QuestionViewSet(viewsets.ModelViewSet[Question]):
         url_path="random_question",
         permission_classes=[IsAuthenticated],
     )
-    def get_random_question(self, request):
+    def get_random_question(self, request: Request):
         category = request.query_params.get("category")
         nb = int(request.query_params.get("number", "1"))
         id_range = request.query_params.get("id_range")
@@ -60,7 +61,7 @@ class QuestionViewSet(viewsets.ModelViewSet[Question]):
         url_path="questions_with",
         permission_classes=[IsAuthenticated],
     )
-    def get_questions_with(self, request):
+    def get_questions_with(self, request: Request):
         text = request.query_params.get("text")
 
         if not text:
@@ -79,7 +80,7 @@ class QuestionViewSet(viewsets.ModelViewSet[Question]):
         url_path="questions_without_answer",
         permission_classes=[IsAuthenticated],
     )
-    def get_questions_without_answer(self, request):
+    def get_questions_without_answer(self, request: Request):
         questions = Question.objects.exclude(answers__is_correct=True)
         serializer = SimpleQuestionSerializer(
             questions, context={"request": request}, many=True
@@ -92,7 +93,7 @@ class QuestionViewSet(viewsets.ModelViewSet[Question]):
         url_path="questions_with_image",
         permission_classes=[IsAuthenticated],
     )
-    def get_questions_with_image(self, request):
+    def get_questions_with_image(self, request: Request):
         url = (
             request.query_params.get("url")
             if request.query_params.get("url") is not None
