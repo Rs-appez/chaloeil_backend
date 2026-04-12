@@ -44,13 +44,10 @@ class QuestionViewSet(viewsets.ModelViewSet[Question]):
             except Exception:
                 return Response({"error": "id_range parameter is invalid"}, status=400)
         else:
-            question = (
-                Question.objects.order_by("?").all()[:nb]
-                if not category
-                else Question.objects.filter(categories__category_text__iexact=category)
-                .order_by("?")
-                .all()[:nb]
-            )
+            questions = Question.objects.all()
+            if category:
+                questions = questions.filter(categories__category_text__iexact=category)
+            question = questions.order_by("?")[:nb]
 
         serializer = QuestionSerializer(
             question, context={"request": request}, many=True
