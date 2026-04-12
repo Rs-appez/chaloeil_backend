@@ -13,6 +13,8 @@ class Question(models.Model):
         upload_to=rename_file, storage=QuestionMediaStorage(), blank=True, null=True
     )
     shuffle_answers = models.BooleanField(default=True)
+    need_review = models.BooleanField(default=False)
+    note = models.TextField(blank=True, null=True)
 
     @override
     def __str__(self) -> str:
