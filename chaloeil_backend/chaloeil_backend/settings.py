@@ -90,7 +90,7 @@ DATABASES = {
         "PORT": 5432,
         "OPTIONS": dict(parse_qsl(tmpPostgres.query)),
     }
-    if not config("USE_SQLITE", default=False)
+    if not config("USE_SQLITE", default=False, cast=bool)
     else {
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": BASE_DIR / "db.sqlite3",
