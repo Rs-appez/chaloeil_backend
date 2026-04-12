@@ -22,7 +22,7 @@ class QuestionAdmin(admin.ModelAdmin):
     inlines = [AnswerInline]
     save_as = True
     list_display = ("question_text", "display_categories", "level")
-    list_filter = ["categories", "level"]
+    list_filter = ["need_review", "categories", "level"]
     search_fields = ["question_text"]
 
     def display_categories(self, obj):
