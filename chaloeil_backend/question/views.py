@@ -4,9 +4,9 @@ from datetime import datetime, timedelta
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import (
+    DjangoModelPermissions,
     IsAdminUser,
     IsAuthenticated,
-    DjangoModelPermissions,
 )
 from rest_framework.response import Response
 from stats.models import PlayerQotd
