@@ -22,8 +22,8 @@ class QuestionAdmin(admin.ModelAdmin):
     inlines = [AnswerInline]
     save_as = True
     list_display = ("question_text", "display_categories", "level")
-    list_filter = ["need_review", "categories", "level", "image_url"]
-    search_fields = ["question_text", "answers__answer_text", "note"]
+    list_filter = ["need_review", "categories", "level"]
+    search_fields = ["question_text", "answers__answer_text", "note", "image_url"]
 
     def display_categories(self, obj):
         return ", ".join([category.category_text for category in obj.categories.all()])
