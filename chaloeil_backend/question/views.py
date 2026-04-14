@@ -147,7 +147,7 @@ class QuestionsOfTheDayViewSet(viewsets.ModelViewSet[QuestionsOfTheDay]):
         url_path="qotd",
         permission_classes=[DjangoModelPermissions],
     )
-    def get_qotd(self, request, _=None):
+    def get_qotd(self, request):
         """
         Get the Questions of the Day
         """
@@ -184,7 +184,7 @@ class QuestionsOfTheDayViewSet(viewsets.ModelViewSet[QuestionsOfTheDay]):
         url_path="generate_qotd",
         permission_classes=[DjangoModelPermissions],
     )
-    def generate_qotd(self, request, _=None):
+    def generate_qotd(self, request):
         """
         Generate Questions of the Day.
         """
