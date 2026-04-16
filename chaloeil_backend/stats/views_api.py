@@ -144,7 +144,11 @@ class QotdStatisticViewSet(viewsets.ModelViewSet):
     def add_score(self, request):
         try:
             player_id = str(request.data.get("player_id"))
-            score = int(request.data.get("score"))
+
+            try:
+                score = int(request.data.get("score", 0))
+            except ValueError:
+                return Response({"error": "Score must be an integer"}, status=400)
 
             player, _ = Player.objects.get_or_create(discord_id=player_id)
 
