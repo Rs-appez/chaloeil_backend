@@ -1,6 +1,5 @@
 import json
 
-from django.db.models.expressions import F
 from django.db.utils import IntegrityError
 from django.utils import timezone
 from question.models import Answer, Question, QuestionOfTheDaySession
