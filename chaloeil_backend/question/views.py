@@ -12,20 +12,17 @@ from rest_framework.response import Response
 from rest_framework.request import Request
 from stats.models import FlagReport, Player, PlayerQotd
 
-from .models import Answer, Category, Question, QuestionsOfTheDay
+from .models import Question, QuestionsOfTheDay
 from .serializers import (
-    AnswerSerializer,
-    CategorySerializer,
     QuestionSerializer,
     QuestionsOfTheDaySerializer,
     SimpleQuestionSerializer,
 )
 
 
-class QuestionViewSet(viewsets.ModelViewSet[Question]):
+class QuestionViewSet(viewsets.GenericViewSet[Question]):
     permission_classes = [IsAdminUser]
     queryset = Question.objects.all()
-    serializer_class = QuestionSerializer
 
     @action(
         detail=False,
@@ -125,18 +122,7 @@ class QuestionViewSet(viewsets.ModelViewSet[Question]):
         return Response({"message": "Question flagged for review successfully"})
 
 
-class CategoryViewSet(viewsets.ReadOnlyModelViewSet[Category]):
-    queryset = Category.objects.all()
-    serializer_class = CategorySerializer
-
-
-class AnswerViewSet(viewsets.ModelViewSet[Answer]):
-    permission_classes = [IsAdminUser]
-    queryset = Answer.objects.all()
-    serializer_class = AnswerSerializer
-
-
-class QuestionsOfTheDayViewSet(viewsets.ModelViewSet[QuestionsOfTheDay]):
+class QuestionsOfTheDayViewSet(viewsets.GenericViewSet[QuestionsOfTheDay]):
     permission_classes = [IsAdminUser]
     queryset = QuestionsOfTheDay.objects.all()
     serializer_class = QuestionsOfTheDaySerializer
@@ -190,6 +176,7 @@ class QuestionsOfTheDayViewSet(viewsets.ModelViewSet[QuestionsOfTheDay]):
         """
         try:
             number_of_questions = random.randint(8, 12)
+            number_of_questions = 2
 
             _ = QuestionsOfTheDay.objects.create(
                 number_of_questions=number_of_questions

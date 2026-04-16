@@ -24,7 +24,7 @@ from .serializers import (
 )
 
 
-class StatisticsViewSet(viewsets.ModelViewSet):
+class StatisticsViewSet(viewsets.GenericViewSet):
     """
     ViewSet for handling statistics related to players and questions.
     """
@@ -80,7 +80,7 @@ class StatisticsViewSet(viewsets.ModelViewSet):
             return Response({"error": f"Missing field: {str(e)}"}, status=400)
 
 
-class PlayerViewSet(viewsets.ModelViewSet):
+class PlayerViewSet(viewsets.GenericViewSet):
     """
     ViewSet for handling player-related operations.
     """
@@ -109,7 +109,7 @@ class PlayerViewSet(viewsets.ModelViewSet):
             return Response({"error": "Invalid JSON format"}, status=400)
 
 
-class TeamViewSet(viewsets.ModelViewSet):
+class TeamViewSet(viewsets.GenericViewSet):
     """
     ViewSet for handling team-related operations.
     """
@@ -142,7 +142,7 @@ class TeamViewSet(viewsets.ModelViewSet):
             return Response({"error": "Invalid JSON format"}, status=400)
 
 
-class QotdStatisticViewSet(viewsets.ModelViewSet):
+class QotdStatisticViewSet(viewsets.GenericViewSet):
     """
     ViewSet for handling Questions of the Day statistics.
     """
@@ -201,7 +201,7 @@ class QotdStatisticViewSet(viewsets.ModelViewSet):
             return Response({"error": str(e)}, status=500)
 
 
-class SessionStatisticViewSet(viewsets.ModelViewSet):
+class SessionStatisticViewSet(viewsets.GenericViewSet):
     """
     ViewSet for handling session statistics.
     """

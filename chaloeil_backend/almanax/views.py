@@ -8,7 +8,7 @@ from .models import EconomyEntry, Job
 from .serializers import EconomyEntrySerializer
 
 
-class EconomyEntryViewSet(viewsets.ModelViewSet[EconomyEntry]):
+class EconomyEntryViewSet(viewsets.GenericViewSet[EconomyEntry]):
     queryset = EconomyEntry.objects.all()
     serializer_class = EconomyEntrySerializer
     permission_classes = [DjangoModelPermissions]
@@ -20,7 +20,7 @@ class EconomyEntryViewSet(viewsets.ModelViewSet[EconomyEntry]):
             return Response({"error": "job parameter is invalid"}, status=400)
         try:
             entry = EconomyEntry.objects.get(job=job)
-            serializer = EconomyEntrySerializer(entry)
+            serializer = self.get_serializer(entry)
             return Response(serializer.data)
         except EconomyEntry.DoesNotExist:
             return Response({"error": "Job not found"}, status=404)
