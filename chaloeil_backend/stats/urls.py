@@ -9,6 +9,7 @@ router.register(r"statistics", api.StatisticsViewSet, basename="statistics")
 router.register(r"teams", api.TeamViewSet, basename="team")
 router.register(r"players", api.PlayerViewSet, basename="player")
 router.register(r"qotdStatistics", api.QotdStatisticViewSet, basename="qotd_statistics")
+router.register(r"sessions", api.SessionStatisticViewSet, basename="session_statistics")
 
 
 urlpatterns = [
