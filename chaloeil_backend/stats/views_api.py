@@ -17,7 +17,12 @@ from .models import (
     Statistic,
     Team,
 )
-from .serializers import PlayerSerializer, StatisticsSerializer, TeamSerializer
+from .serializers import (
+    PlayerSerializer,
+    SessionStatisticSerializer,
+    StatisticsSerializer,
+    TeamSerializer,
+)
 
 
 class StatisticsViewSet(viewsets.ModelViewSet):
@@ -198,7 +203,7 @@ class SessionStatisticViewSet(viewsets.ModelViewSet):
     """
 
     queryset = SessionStatistic.objects.all()
-    serializer_class = StatisticsSerializer
+    serializer_class = SessionStatisticSerializer
     permission_classes = [DjangoModelPermissions]
 
     @action(detail=False, methods=["post"], permission_classes=[DjangoModelPermissions])
