@@ -2,7 +2,7 @@ import json
 
 from django.db.utils import IntegrityError
 from django.utils import timezone
-from question.models import Answer, Question, QuestionOfTheDaySession
+from question.models import Answer, Question, QuestionOfTheDaySession, QuestionsOfTheDay
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import DjangoModelPermissions
@@ -12,7 +12,6 @@ from .models import (
     Player,
     PlayerQotd,
     QotdStatistic,
-    QuestionsOfTheDay,
     SessionStatistic,
     Statistic,
     Team,
@@ -42,6 +41,7 @@ class StatisticsViewSet(viewsets.ModelViewSet):
             for data in answers:
                 player = data.get("player_id", None)
                 players = data.get("players_id", None)
+                team = None
 
                 answer_id = data.get("answer_id")
 
@@ -54,6 +54,11 @@ class StatisticsViewSet(viewsets.ModelViewSet):
                     team = Team.get_team_by_players(players)
                     if not team:
                         return Response({"error": "Team not found"}, status=404)
+                else:
+                    return Response(
+                        {"error": "Either player_id or players_id must be provided"},
+                        status=400,
+                    )
 
                 participant = player or team
 
@@ -62,11 +67,12 @@ class StatisticsViewSet(viewsets.ModelViewSet):
                     return Response({"error": "Question not found"}, status=404)
                 answer = Answer.objects.filter(id=answer_id).first()
 
-                statistics, created = Statistic.objects.get_or_create(
+                statistics, _ = Statistic.objects.get_or_create(
                     player=participant, question=question
                 )
 
-                statistics.increment_asked_count(answer)
+                if answer:
+                    statistics.increment_asked_count(answer)
 
             return Response("Statistics added successfully", status=201)
 
@@ -125,13 +131,11 @@ class TeamViewSet(viewsets.ModelViewSet):
                     team = Team.objects.create()
                     players = []
                     for player_id in team_data["players"]:
-                        player, created = Player.objects.get_or_create(
-                            discord_id=player_id
-                        )
+                        player, _ = Player.objects.get_or_create(discord_id=player_id)
                         players.append(player)
                     team.players.set(players)
 
-                team.add_name(team_data["name"])
+                _ = team.add_name(team_data["name"])
                 team.save()
             return Response("Teams added successfully", status=201)
         except json.JSONDecodeError:
