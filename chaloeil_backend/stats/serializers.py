@@ -8,6 +8,7 @@ from .models import (
     TeamName,
     Participant,
     QotdStatistic,
+    SessionStatistic,
 )
 from question.serializers import QuestionSerializer, AnswerSerializer
 
@@ -77,4 +78,12 @@ class QotdStatisticSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = QotdStatistic
+        fields = ["id", "player", "score"]
+
+
+class SessionStatisticSerializer(serializers.ModelSerializer):
+    player = ParticipantSerializer()
+
+    class Meta:
+        model = SessionStatistic
         fields = ["id", "player", "score"]
