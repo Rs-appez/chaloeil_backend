@@ -66,6 +66,16 @@ class QuestionOfTheDaySession(models.Model):
         return f"Session of {self.date}"
 
 
+class QuestionsOfTheDayStandalone(models.Model):
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    session = models.ForeignKey(
+        QuestionOfTheDaySession,
+        on_delete=models.CASCADE,
+        related_name="standalone_qotd",
+        null=True,
+    )
+
+
 class QuestionsOfTheDay(models.Model):
     number_of_questions: models.PositiveSmallIntegerField[int, int] = (
         models.PositiveSmallIntegerField(default=20)
@@ -125,7 +135,13 @@ class QuestionsOfTheDay(models.Model):
                 id__in=QuestionsOfTheDayQuestion.objects.filter(
                     questions_of_the_day__session=self.session
                 ).values("question_id")
-            ).order_by("?")[:count]
+            )
+            .exclude(
+                id__in=QuestionsOfTheDayStandalone.objects.filter(
+                    session=self.session
+                ).values("question_id")
+            )
+            .order_by("?")[:count]
         )
 
     def __get_nb_questions_in_qotd(self) -> int:
