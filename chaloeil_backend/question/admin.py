@@ -7,10 +7,12 @@ from .models import (
     Level,
     QuestionsOfTheDay,
     QuestionsOfTheDayQuestion,
+    QuestionOfTheDaySession,
 )
 
 admin.site.register(Category)
 admin.site.register(Level)
+admin.site.register(QuestionOfTheDaySession)
 
 
 @admin.register(Question)
