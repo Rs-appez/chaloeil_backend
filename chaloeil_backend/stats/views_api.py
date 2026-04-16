@@ -1,7 +1,9 @@
 import json
 
+from django.db.models.expressions import F
 from django.db.utils import IntegrityError
-from question.models import Answer, Question
+from django.utils import timezone
+from question.models import Answer, Question, QuestionOfTheDaySession
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import DjangoModelPermissions
@@ -12,6 +14,7 @@ from .models import (
     PlayerQotd,
     QotdStatistic,
     QuestionsOfTheDay,
+    SessionStatistic,
     Statistic,
     Team,
 )
@@ -186,5 +189,47 @@ class QotdStatisticViewSet(viewsets.ModelViewSet):
             return Response(
                 {"error": "Player has already logged this QOTD"}, status=403
             )
+        except Exception as e:
+            return Response({"error": str(e)}, status=500)
+
+
+class SessionStatisticViewSet(viewsets.ModelViewSet):
+    """
+    ViewSet for handling session statistics.
+    """
+
+    queryset = SessionStatistic.objects.all()
+    serializer_class = StatisticsSerializer
+    permission_classes = [DjangoModelPermissions]
+
+    @action(detail=False, methods=["post"], permission_classes=[DjangoModelPermissions])
+    def add_score(self, request):
+        try:
+            player_id = str(request.data.get("player_id"))
+            try:
+                score = int(request.data.get("score", 0))
+            except ValueError:
+                return Response({"error": "Score must be an integer"}, status=400)
+
+            player, _ = Player.objects.get_or_create(discord_id=player_id)
+            session = (
+                QuestionOfTheDaySession.objects.filter(
+                    active=True, date__lt=timezone.now()
+                )
+                .only("id")
+                .last()
+            )
+
+            if not session:
+                return Response({"error": "No active session found"}, status=404)
+
+            stat, _ = SessionStatistic.objects.get_or_create(
+                player=player, session=session, defaults={"score": 0}
+            )
+            stat.increment_score(score)
+
+            return Response("SessionStatistic updated successfully", status=200)
+        except TypeError as e:
+            return Response({"error": f"Invalid data type: {str(e)}"}, status=400)
         except Exception as e:
             return Response({"error": str(e)}, status=500)
