@@ -8,11 +8,13 @@ from .models import (
     QuestionsOfTheDay,
     QuestionsOfTheDayQuestion,
     QuestionOfTheDaySession,
+    QuestionsOfTheDayStandalone,
 )
 
 admin.site.register(Category)
 admin.site.register(Level)
 admin.site.register(QuestionOfTheDaySession)
+admin.site.register(QuestionsOfTheDayStandalone)
 
 
 @admin.register(Question)
