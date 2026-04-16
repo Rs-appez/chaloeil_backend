@@ -2,7 +2,7 @@ from typing import override
 
 from django.db import models
 from django.db.models import F, QuerySet, Sum
-from question.models import Answer, Question, QuestionsOfTheDay
+from question.models import Answer, Question, QuestionsOfTheDay, QuestionOfTheDaySession
 
 
 class Participant(models.Model):
@@ -169,8 +169,27 @@ class QotdStatistic(models.Model):
         return f"{self.player} - Score: {self.score}"
 
     def increment_score(self, points: int):
-        self.score = F("score") + points
-        self.save(update_fields=["score"])
+        _ = self.objects.filter(pk=self.pk).update(score=F("score") + points)
+
+
+class SessionStatistic(models.Model):
+    session = models.ForeignKey(QuestionOfTheDaySession, on_delete=models.CASCADE)
+    player = models.ForeignKey(Player, on_delete=models.CASCADE)
+    score = models.PositiveSmallIntegerField(default=0)
+
+    @override
+    def __str__(self) -> str:
+        return f"{self.player} - Session: {self.session} - Score: {self.score}"
+
+    def increment_score(self, score: int):
+
+        _ = SessionStatistic.objects.filter(pk=self.pk).update(score=F("score") + score)
+
+        rows = QotdStatistic.objects.filter(player=self.player).update(
+            score=F("score") + score
+        )
+        if not rows:
+            _ = QotdStatistic.objects.create(player=self.player, score=score)
 
 
 class FlagReport(models.Model):
