@@ -165,7 +165,7 @@ class QotdStatisticViewSet(viewsets.ModelViewSet):
             return Response({"error": str(e)}, status=500)
 
     @action(detail=False, methods=["post"], permission_classes=[DjangoModelPermissions])
-    def log_player(self, request, pk=None):
+    def log_player(self, request):
         try:
             player_id = str(request.data.get("player_id"))
             question_of_the_day_id = int(request.data.get("qotd_id"))
@@ -175,7 +175,7 @@ class QotdStatisticViewSet(viewsets.ModelViewSet):
             question_of_the_day = QuestionsOfTheDay.objects.get(
                 id=question_of_the_day_id
             )
-            PlayerQotd.objects.create(
+            _ = PlayerQotd.objects.create(
                 player=player, question_of_the_day=question_of_the_day
             )
 
