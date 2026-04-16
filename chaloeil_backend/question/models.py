@@ -2,6 +2,7 @@ from typing import override
 
 from chaloeil_backend.storage_backends import QuestionMediaStorage, rename_file
 from django.db import models
+from django.utils import timezone
 
 
 class Question(models.Model):
@@ -55,12 +56,28 @@ class Level(models.Model):
         return self.level_text
 
 
+class QuestionOfTheDaySession(models.Model):
+    date = models.DateTimeField()
+    active = models.BooleanField(default=True)
+    number_of_questions = models.PositiveSmallIntegerField(default=1)
+
+    @override
+    def __str__(self) -> str:
+        return f"Session of {self.date}"
+
+
 class QuestionsOfTheDay(models.Model):
     number_of_questions: models.PositiveSmallIntegerField[int, int] = (
         models.PositiveSmallIntegerField(default=20)
     )
     time_to_answer_hour = models.PositiveSmallIntegerField(default=8)
     date = models.DateTimeField(auto_now_add=True)
+    session = models.ForeignKey(
+        QuestionOfTheDaySession,
+        on_delete=models.CASCADE,
+        related_name="qotd",
+        null=True,
+    )
 
     @override
     def __str__(self) -> str:
@@ -69,8 +86,21 @@ class QuestionsOfTheDay(models.Model):
     @override
     def save(self, *args, **kwargs):
         is_new = self.pk is None
-        super().save(*args, **kwargs)
         if is_new:
+            self.session = QuestionOfTheDaySession.objects.filter(
+                active=True, date__lt=timezone.now()
+            ).last()
+            if not self.session:
+                raise ValueError("No active session found for Questions of the Day")
+            if (
+                self.session.number_of_questions
+                == QuestionsOfTheDay.objects.filter(session=self.session).count()
+            ):
+                raise ValueError(
+                    "The number of questions for this session has already been reached"
+                )
+
+            super().save(*args, **kwargs)
             questions = self.__get_random_questions_not_in_qotd(
                 self.number_of_questions
             )
@@ -83,15 +113,18 @@ class QuestionsOfTheDay(models.Model):
                 for idx, question in enumerate(questions)
             ]
             _ = QuestionsOfTheDayQuestion.objects.bulk_create(objects)
+
             self.number_of_questions = len(objects)
         else:
             self.number_of_questions = self.__get_nb_questions_in_qotd()
-        super().save(update_fields=["number_of_questions"])
+        super().save(update_fields=["number_of_questions", "session"])
 
     def __get_random_questions_not_in_qotd(self, count: int) -> list[Question]:
         return list(
             Question.objects.exclude(
-                id__in=QuestionsOfTheDayQuestion.objects.values("question_id")
+                id__in=QuestionsOfTheDayQuestion.objects.filter(
+                    questions_of_the_day__session=self.session
+                ).values("question_id")
             ).order_by("?")[:count]
         )
 

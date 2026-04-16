@@ -190,6 +190,7 @@ class QuestionsOfTheDayViewSet(viewsets.ModelViewSet[QuestionsOfTheDay]):
         """
         try:
             number_of_questions = random.randint(8, 12)
+            number_of_questions = 2
 
             _ = QuestionsOfTheDay.objects.create(
                 number_of_questions=number_of_questions
@@ -198,5 +199,7 @@ class QuestionsOfTheDayViewSet(viewsets.ModelViewSet[QuestionsOfTheDay]):
             return Response(
                 {"message": "Questions of the Day generated successfully"}, status=201
             )
+        except ValueError as ve:
+            return Response({"error": str(ve)}, status=400)
         except Exception as e:
             return Response({"error": str(e)}, status=500)
