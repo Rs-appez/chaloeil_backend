@@ -1,6 +1,7 @@
 from typing import override
+
 from django.db import models
-from django.db.models import QuerySet, Sum
+from django.db.models import F, QuerySet, Sum
 from question.models import Answer, Question, QuestionsOfTheDay
 
 
@@ -168,8 +169,8 @@ class QotdStatistic(models.Model):
         return f"{self.player} - Score: {self.score}"
 
     def increment_score(self, points: int):
-        self.score += points
-        self.save()
+        self.score = F("score") + points
+        self.save(update_fields=["score"])
 
 
 class FlagReport(models.Model):
