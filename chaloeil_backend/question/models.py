@@ -125,9 +125,9 @@ class QuestionsOfTheDay(models.Model):
             _ = QuestionsOfTheDayQuestion.objects.bulk_create(objects)
 
             self.number_of_questions = len(objects)
+            super().save(update_fields=["number_of_questions", "session"])
         else:
-            self.number_of_questions = self.__get_nb_questions_in_qotd()
-        super().save(update_fields=["number_of_questions", "session"])
+            super().save(*args, **kwargs)
 
     def __get_random_questions_not_in_qotd(self, count: int) -> list[Question]:
         return list(
