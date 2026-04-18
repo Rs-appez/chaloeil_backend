@@ -10,6 +10,7 @@ from rest_framework.permissions import (
 )
 from rest_framework.response import Response
 from rest_framework.request import Request
+from .permissions import CanFlagQuestion
 from stats.models import FlagReport, Player, PlayerQotd
 
 from .models import Question, QuestionsOfTheDay
@@ -104,7 +105,7 @@ class QuestionViewSet(viewsets.GenericViewSet[Question]):
 
         return Response(serializer.data)
 
-    @action(detail=True, methods=["post"], permission_classes=[IsAdminUser])
+    @action(detail=True, methods=["post"], permission_classes=[CanFlagQuestion])
     def flag_for_review(self, request: Request, pk=None):
         player_id = request.data.get("player_id", None)
         if not player_id:
@@ -114,10 +115,8 @@ class QuestionViewSet(viewsets.GenericViewSet[Question]):
         if not player:
             return Response({"error": "Player not found"}, status=404)
 
-        question = self.get_object()
-        question.need_review = True
-        question.save(update_fields=["need_review"])
-        _ = FlagReport.objects.create(question=question, player=player)
+        _ = Question.objects.filter(id=pk).update(need_review=True)
+        _ = FlagReport.objects.create(question_id=pk, player=player)
 
         return Response({"message": "Question flagged for review successfully"})
 
