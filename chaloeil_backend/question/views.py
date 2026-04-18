@@ -1,6 +1,7 @@
 import random
 from datetime import datetime, timedelta
 
+from django.shortcuts import get_object_or_404
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import (
@@ -8,12 +9,17 @@ from rest_framework.permissions import (
     IsAdminUser,
     IsAuthenticated,
 )
-from rest_framework.response import Response
 from rest_framework.request import Request
+from rest_framework.response import Response
 from .permissions import CanFlagQuestion
 from stats.models import FlagReport, Player, PlayerQotd
 
-from .models import Question, QuestionsOfTheDay
+from .models import (
+    Question,
+    QuestionOfTheDaySession,
+    QuestionsOfTheDay,
+    QuestionsOfTheDayStandalone,
+)
 from .serializers import (
     QuestionSerializer,
     QuestionsOfTheDaySerializer,
@@ -186,5 +192,35 @@ class QuestionsOfTheDayViewSet(viewsets.GenericViewSet[QuestionsOfTheDay]):
             )
         except ValueError as ve:
             return Response({"error": str(ve)}, status=400)
+        except Exception as e:
+            return Response({"error": str(e)}, status=500)
+
+    @action(
+        detail=False,
+        methods=["post"],
+        permission_classes=[DjangoModelPermissions],
+    )
+    def create_standalone_qotd(self, request):
+        """
+        Create a standalone Question of the Day.
+        """
+        try:
+            session = QuestionOfTheDaySession.objects.filter(
+                active=True, date__lt=datetime.now()
+            ).last()
+            if not session:
+                return Response({"error": "No active session found"}, status=404)
+
+            question_id = request.data.get("question_id")
+            question = get_object_or_404(Question, id=question_id)
+
+            _ = QuestionsOfTheDayStandalone.objects.create(
+                question=question, session=session
+            )
+
+            return Response(
+                {"message": "Standalone Question of the Day created successfully"},
+                status=201,
+            )
         except Exception as e:
             return Response({"error": str(e)}, status=500)
