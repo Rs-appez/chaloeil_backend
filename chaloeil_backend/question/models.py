@@ -17,6 +17,11 @@ class Question(models.Model):
     need_review = models.BooleanField(default=False)
     note = models.TextField(blank=True, null=True)
 
+    class Meta:
+        permissions = [
+            ("can_flag_question", "Can flag question"),
+        ]
+
     @override
     def __str__(self) -> str:
         return self.question_text
