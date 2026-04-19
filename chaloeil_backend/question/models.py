@@ -146,6 +146,7 @@ class QuestionsOfTheDay(models.Model):
                     session=self.session
                 ).values("question_id")
             )
+            .exclude(need_review=True)
             .order_by("?")[:count]
         )
 
