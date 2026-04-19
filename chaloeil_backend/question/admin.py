@@ -9,12 +9,14 @@ from .models import (
     QuestionsOfTheDayQuestion,
     QuestionOfTheDaySession,
     QuestionsOfTheDayStandalone,
+    FlagReport,
 )
 
 admin.site.register(Category)
 admin.site.register(Level)
 admin.site.register(QuestionOfTheDaySession)
 admin.site.register(QuestionsOfTheDayStandalone)
+admin.site.register(FlagReport)
 
 
 @admin.register(Question)

@@ -12,9 +12,10 @@ from rest_framework.permissions import (
 from rest_framework.request import Request
 from rest_framework.response import Response
 from .permissions import CanFlagQuestion
-from stats.models import FlagReport, Player, PlayerQotd
+from stats.models import Player, PlayerQotd
 
 from .models import (
+    FlagReport,
     Question,
     QuestionOfTheDaySession,
     QuestionsOfTheDay,

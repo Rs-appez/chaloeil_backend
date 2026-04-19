@@ -168,3 +168,17 @@ class QuestionsOfTheDayQuestion(models.Model):
     @override
     def __str__(self) -> str:
         return f"{self.questions_of_the_day} - {self.question.question_text}"
+
+
+class FlagReport(models.Model):
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    player = models.ForeignKey(
+        "stats.Player", on_delete=models.SET_NULL, null=True, blank=True
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    @override
+    def __str__(self) -> str:
+        return (
+            f"FlagReport for {self.question.question_text} - reported by {self.player}"
+        )
