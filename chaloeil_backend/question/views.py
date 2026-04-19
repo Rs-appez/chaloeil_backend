@@ -19,6 +19,7 @@ from .models import (
     Question,
     QuestionOfTheDaySession,
     QuestionsOfTheDay,
+    QuestionsOfTheDayQuestion,
     QuestionsOfTheDayStandalone,
 )
 from .serializers import (
@@ -195,6 +196,13 @@ class QuestionsOfTheDayViewSet(viewsets.GenericViewSet[QuestionsOfTheDay]):
         except Exception as e:
             return Response({"error": str(e)}, status=500)
 
+
+class QuestionsOfTheDayStandaloneViewSet(
+    viewsets.GenericViewSet[QuestionsOfTheDayStandalone]
+):
+    permission_classes = [IsAdminUser]
+    queryset = QuestionsOfTheDayStandalone.objects.all()
+
     @action(
         detail=False,
         methods=["post"],
@@ -211,15 +219,41 @@ class QuestionsOfTheDayViewSet(viewsets.GenericViewSet[QuestionsOfTheDay]):
             if not session:
                 return Response({"error": "No active session found"}, status=404)
 
-            question_id = request.data.get("question_id")
-            question = get_object_or_404(Question, id=question_id)
+            question_category = request.data.get("category", None)
+
+            questions = (
+                Question.objects.exclude(
+                    id__in=QuestionsOfTheDayQuestion.objects.filter(
+                        questions_of_the_day__session=session
+                    ).values("question_id")
+                )
+                .exclude(
+                    id__in=QuestionsOfTheDayStandalone.objects.filter(
+                        session=session
+                    ).values("question_id")
+                )
+                .exclude(need_review=True)
+            )
+            if question_category:
+                questions = questions.filter(
+                    categories__category_text__iexact=question_category
+                )
+
+            question = questions.order_by("?").first()
 
             _ = QuestionsOfTheDayStandalone.objects.create(
                 question=question, session=session
             )
 
+            question_serializer = QuestionSerializer(
+                question, context={"request": request}
+            ).data
+
             return Response(
-                {"message": "Standalone Question of the Day created successfully"},
+                {
+                    "message": "Standalone Question of the Day created successfully",
+                    "question": question_serializer,
+                },
                 status=201,
             )
         except Exception as e:
