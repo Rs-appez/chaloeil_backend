@@ -149,11 +149,6 @@ class QuestionsOfTheDay(models.Model):
             .order_by("?")[:count]
         )
 
-    def __get_nb_questions_in_qotd(self) -> int:
-        return QuestionsOfTheDayQuestion.objects.filter(
-            questions_of_the_day=self
-        ).count()
-
 
 class QuestionsOfTheDayQuestion(models.Model):
     questions_of_the_day = models.ForeignKey(
