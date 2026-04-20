@@ -94,6 +94,18 @@ class GlobalLeaderboardSerializer(serializers.ModelSerializer):
         return obj.player.name
 
 
+class LeaderboardSerializer(serializers.ModelSerializer):
+    player = serializers.SerializerMethodField()
+    rank = serializers.IntegerField(read_only=True)
+
+    class Meta:
+        model = SessionStatistic
+        fields = ["player", "score", "rank"]
+
+    def get_player(self, obj):
+        return obj.player.name
+
+
 class SessionStatisticSerializer(serializers.ModelSerializer):
     player = ParticipantSerializer()
 
