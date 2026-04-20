@@ -81,6 +81,18 @@ class QotdStatisticSerializer(serializers.ModelSerializer):
         fields = ["id", "player", "score"]
 
 
+class GlobalLeaderboardSerializer(serializers.ModelSerializer):
+    player = serializers.SerializerMethodField()
+    session_count = serializers.IntegerField(read_only=True)
+
+    class Meta:
+        model = QotdStatistic
+        fields = ["player", "score", "session_count"]
+
+    def get_player(self, obj):
+        return obj.player.name
+
+
 class SessionStatisticSerializer(serializers.ModelSerializer):
     player = ParticipantSerializer()
 
