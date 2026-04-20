@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import permission_required
-from django.db.models import Count
+from django.db.models import Count, F, Window
+from django.db.models.functions import Rank
 from django.shortcuts import render
 from question.models import QuestionsOfTheDay
 
@@ -30,6 +31,7 @@ def qotd_stats(request):
 def leaderboard_global(request):
     stats = (
         QotdStatistic.objects.exclude(player__name="appez")
+        .annotate(rank=Window(expression=Rank(), order_by=F("score").desc()))
         .annotate(session_count=Count("player__sessionstatistic"))
         .order_by("-score")
     )

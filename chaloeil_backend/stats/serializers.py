@@ -84,10 +84,11 @@ class QotdStatisticSerializer(serializers.ModelSerializer):
 class GlobalLeaderboardSerializer(serializers.ModelSerializer):
     player = serializers.SerializerMethodField()
     session_count = serializers.IntegerField(read_only=True)
+    rank = serializers.IntegerField(read_only=True)
 
     class Meta:
         model = QotdStatistic
-        fields = ["player", "score", "session_count"]
+        fields = ["player", "score", "session_count", "rank"]
 
     def get_player(self, obj):
         return obj.player.name
