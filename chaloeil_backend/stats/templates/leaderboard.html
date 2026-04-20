@@ -16,6 +16,7 @@
             <table class="leaderboard-table">
                 <thead>
                     <tr>
+                        <th>#</th>
                         <th>Nom</th>
                         <th>Score</th>
                         <th>Participation</th>
@@ -24,6 +25,7 @@
                 <tbody>
                     {% for p in participants %}
                         <tr>
+                            <td>{{ forloop.counter }}</td>
                             <td>{{ p.player }}</td>
                             <td>{{ p.score }}</td>
                             <td>{{ p.session_count }}</td>

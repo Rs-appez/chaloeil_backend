@@ -42,7 +42,7 @@
   border-bottom: none;
 }
 
-.leaderboard-table th:nth-child(-n + 3),
-.leaderboard-table td:nth-child(-n + 3) {
-  width: 10%;
+.leaderboard-table th:nth-child(1),
+.leaderboard-table td:nth-child(1) {
+  width: 5%;
 }
