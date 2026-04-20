@@ -28,8 +28,10 @@ def qotd_stats(request):
 
 
 def leaderboard_global(request):
-    stats = QotdStatistic.objects.annotate(
-        session_count=Count("player__sessionstatistic")
-    ).order_by("-score")
+    stats = (
+        QotdStatistic.objects.exclude(player__name="appez")
+        .annotate(session_count=Count("player__sessionstatistic"))
+        .order_by("-score")
+    )
     data = GlobalLeaderboardSerializer(stats, many=True).data
     return render(request, "leaderboard.html", {"participants": data})
