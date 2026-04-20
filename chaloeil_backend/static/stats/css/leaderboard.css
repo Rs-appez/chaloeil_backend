@@ -1,0 +1,48 @@
+.leaderboard-table-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  min-height: 100vh;
+}
+
+.leaderboard-table {
+  width: 80%;
+  border-collapse: collapse;
+  background: var(--surface-color);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.leaderboard-table thead {
+  background: var(--accent-color);
+  color: #fff;
+}
+
+.leaderboard-table th {
+  padding: 1rem;
+  font-weight: 600;
+}
+
+.leaderboard-table td {
+  padding: 1rem;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-color);
+}
+
+.leaderboard-table tbody tr:hover {
+  background: rgba(212, 175, 55, 0.1);
+  transition: background 0.2s;
+}
+
+.leaderboard-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.leaderboard-table th:nth-child(-n + 3),
+.leaderboard-table td:nth-child(-n + 3) {
+  width: 10%;
+}
