@@ -1,0 +1,33 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Leaderboard</title>
+        <link href="{% static "stats/css/index.css" %}" rel="stylesheet" />
+    </head>
+    <body>
+        <div class="header">
+            <h1>The best of all time !</h1>
+        </div>
+        <table class="stats-table">
+            <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Score</th>
+                    <th>Participation</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in participants %}
+                    <tr>
+                        <td>{{ p.player }}</td>
+                        <td>{{ p.score }}</td>
+                        <td>{{ p.session_count }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </body>
+</html>
