@@ -1,0 +1,36 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Leaderboard</title>
+        <link href="{% static "stats/css/index.css" %}" rel="stylesheet" />
+        <link href="{% static "stats/css/leaderboard.css" %}" rel="stylesheet" />
+    </head>
+    <body>
+        <div class="header">
+            <h1>Classement de l'évent du {{ session.date|date:"d/m/Y" }}</h1>
+        </div>
+        <div class="leaderboard-table-container">
+            <table class="leaderboard-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Nom</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for p in participants %}
+                        <tr>
+                            <td>{{ p.rank }}</td>
+                            <td>{{ p.player }}</td>
+                            <td>{{ p.score }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </body>
+</html>

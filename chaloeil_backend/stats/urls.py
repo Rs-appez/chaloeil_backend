@@ -17,4 +17,5 @@ urlpatterns = [
     path("", v.index, name="index"),
     path("qotd-stats/", v.qotd_stats, name="qotd_stats"),
     path("leaderboard/", v.leaderboard_global, name="leaderboard_global"),
+    path("leaderboard/<int:qotd_id>/", v.leaderboard, name="leaderboard"),
 ]
