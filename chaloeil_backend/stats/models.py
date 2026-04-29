@@ -139,6 +139,7 @@ class Statistic(models.Model):
                     if stat["total_asked"]
                     else 0.0
                 ),
+                "total_asked": stat["total_asked"],
                 "image": questions_map[stat["question"]].get_image_url(),
                 "level": questions_map[stat["question"]].level.level_text,
             }
