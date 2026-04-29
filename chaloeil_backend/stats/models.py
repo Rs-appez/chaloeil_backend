@@ -146,7 +146,11 @@ class Statistic(models.Model):
             for stat in aggregated
         ]
 
-        return sorted(results, key=lambda item: item["percentage"], reverse=True)
+        return sorted(
+            results,
+            key=lambda item: (item["percentage"], item["total_asked"]),
+            reverse=True,
+        )
 
 
 class PlayerQotd(models.Model):
