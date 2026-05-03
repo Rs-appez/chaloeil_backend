@@ -2,6 +2,7 @@ import random
 from datetime import datetime, timedelta
 
 from django.shortcuts import get_object_or_404
+from django.utils import timezone
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import (
@@ -43,6 +44,7 @@ class QuestionViewSet(viewsets.GenericViewSet[Question]):
         category = request.query_params.get("category")
         nb = int(request.query_params.get("number", "1"))
         id_range = request.query_params.get("id_range")
+        event = request.query_params.get("event", "false") == "true"
 
         questions = Question.objects.exclude(need_review=True)
         if id_range:
@@ -53,8 +55,32 @@ class QuestionViewSet(viewsets.GenericViewSet[Question]):
                 return Response({"error": "id_range parameter is invalid"}, status=400)
         if category:
             questions = questions.filter(categories__category_text__iexact=category)
+        if event:
+            session = QuestionOfTheDaySession.objects.filter(
+                active=True, date__lt=timezone.now()
+            ).last()
+            questions = Question.objects.exclude(
+                id__in=QuestionsOfTheDayQuestion.objects.filter(
+                    questions_of_the_day__session=session
+                ).values("question_id")
+            ).exclude(
+                id__in=QuestionsOfTheDayStandalone.objects.filter(
+                    session=session
+                ).values("question_id")
+            )
 
         question = questions.order_by("?")[:nb]
+
+        if event:
+            _ = QuestionsOfTheDayStandalone.objects.bulk_create(
+                [
+                    QuestionsOfTheDayStandalone(
+                        question=q,
+                        session=session,  # pyright: ignore[reportPossiblyUnboundVariable]
+                    )
+                    for q in question
+                ]
+            )
 
         serializer = QuestionSerializer(
             question, context={"request": request}, many=True
