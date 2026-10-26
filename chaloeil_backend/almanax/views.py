@@ -8,7 +8,7 @@ from .models import EconomyEntry, Job
 from .serializers import EconomyEntrySerializer
 
 
-class EconomyEntryViewSet(viewsets.GenericViewSet[EconomyEntry]):
+class EconomyEntryViewSet(viewsets.ModelViewSet[EconomyEntry]):
     queryset = EconomyEntry.objects.all()
     serializer_class = EconomyEntrySerializer
     permission_classes = [DjangoModelPermissions]
